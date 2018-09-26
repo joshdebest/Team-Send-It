@@ -4,5 +4,5 @@
 *Team Lead:* 
 *Architect:* 
 *UI/UX Design:* 
-*API/DB Design:* 
+*API/DB Design:* Wesley Khademi
 *QA Lead:* 
