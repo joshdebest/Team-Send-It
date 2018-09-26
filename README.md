@@ -1,7 +1,7 @@
 # Team-Send-It
 
 ## Team Roles
-**Team Lead:** 
+**Team Lead:** Josh DeBest
 **Architect:** 
 **UI/UX Design:** 
 **API/DB Design:** 
