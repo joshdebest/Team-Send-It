@@ -17,7 +17,7 @@
 **QA Lead:** Hayden Baker
 =======
 *Team Lead:* 
-*Architect:* 
+*Architect:* Lucas Han
 *UI/UX Design:* 
 *API/DB Design:* Wesley Khademi
 *QA Lead:* 
