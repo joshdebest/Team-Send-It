@@ -1,6 +1,6 @@
 # Team-Send-It
 
-##Team Roles
+## Team Roles
 *Team Lead:*
 *Architect:*
 *UI/UX Design:*
