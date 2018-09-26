@@ -5,4 +5,4 @@
 **Architect:** 
 **UI/UX Design:** 
 **API/DB Design:** 
-**QA Lead:** 
+**QA Lead:** Hayden Baker
