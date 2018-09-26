@@ -2,7 +2,7 @@
 
 ## Team Roles
 **Team Lead:** Josh DeBest
-**Architect:** 
+**Architect:** Lucas Han 
 **UI/UX Design:** 
 **API/DB Design:** 
 **QA Lead:** Hayden Baker
