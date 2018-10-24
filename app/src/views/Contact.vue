@@ -1,0 +1,29 @@
+<template>
+  <div class="contact">
+    <h2 class="title">Contact Us</h2> 
+      <div id="after_submit"></div>
+      <form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <label class="required" for="name">Name:</label><br />
+          <input id="name" class="input" name="name" type="text" value="" size="30" /><br />
+          <span id="name_validation" class="error_message"></span>
+        </div>
+        <div class="row">
+          <label class="required" for="email">Email:</label><br />
+          <input id="email" class="input" name="email" type="text" value="" size="30" /><br />
+          <span id="email_validation" class="error_message"></span>
+        </div>
+        <div class="row">
+          <label class="required" for="phone">Phone Number:</label><br />
+          <input id="phone" class="input" name="phone" type="text" value="" size="30" /><br />
+          <span id="phone_validation" class="error_message"></span>
+        </div>
+        <div class="row">
+          <label class="required" for="message">Message:</label><br />
+          <textarea id="message" class="input" name="message" rows="7" cols="30"></textarea><br />
+          <span id="message_validation" class="error_message"></span>
+        </div>  
+          <input id="submit_button" type="submit" value="Submit" />
+      </form>
+  </div>
+</template>
