@@ -27,9 +27,9 @@ export default new Router({
       component: () => import(/* webpackChunkName: "accessories" */ './views/Accessories.vue'),
     },
     {
-      path: '/services_&_repairs',
-      name: 'services_&_repairs',
-      component: () => import(/* webpackChunkName: "accessories" */ './views/Services_&_Repairs.vue'),
+      path: '/services',
+      name: 'services',
+      component: () => import(/* webpackChunkName: "accessories" */ './views/Services.vue'),
     },
   ],
 });
