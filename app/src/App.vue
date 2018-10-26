@@ -5,7 +5,7 @@
       <router-link to="/">HOME</router-link>
       <router-link to="/bikes">BIKES</router-link>
       <router-link to="/accessories">ACCESSORIES</router-link>
-      <router-link to="/service and repairs">SERVICE AND REPAIRS</router-link>
+      <router-link to="/services">SERVICE AND REPAIRS</router-link>
       <router-link to="/contact">CONTACT</router-link>
       <router-link to="/login">LOGIN</router-link>
     </div>
