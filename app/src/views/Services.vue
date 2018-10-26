@@ -7,6 +7,9 @@
     <img src = http://sidehustlehq.com/wp-content/uploads/2017/07/bicyclerepair.jpg>
     <img src = http://www.ridesonair.com/images/full-sized/professional-bike-workshop.jpg>
     <h3 class="phone">PICKUP AND DELIVERY AVAILABLE! - CALL STORE FOR DETAILS!</h3>
+    <p style="white-space: pre-wrap;"><strong>SERVICE PACKAGES</strong><br>Minor tune-up (lube, air tires, check brakes, check derailleurs, check components are tight)<br>Major tune-up<br>Drivetrain overhaul<br>Brake overhaul<br>Complete bicycle overhaul<br>Complete bearing overhaul<br>Electric bike service<br>Bosch eBike drivetrain service<br>Detail bike: thoroughly clean bicycle and components; polish and wax bicycle</p>
+    <p style="white-space: pre-wrap;"><strong>BRAKES</strong><br>Replace brake cable(s)<br>Replace brake shoes<br>Minor brake adjustment<br>Major brake adjustment<br>Bleed hydraulic disc brakes<br>Disc-brake rotor repair<br>Hydraulic disc brake line repair/replace<br>Install and adjust new brakes</p>   
+    <p style="white-space: pre-wrap;"><strong>WHEELS</strong><br>Flat tire repair<br>Replace tire(s)<br>Replace broken spoke(s)<br>Install new front wheel<br>Install new rear wheel<br>Wheel truing (Minor/Major)<br>Wheel retensioning, dishing and truing<br>Custom wheel building<br>Hub bearing overhaul</p>
     <h3 class="phone">Phone: 123-123-1234</h3>
 
     <h4 class="hours" style="white-space: pre-wrap;"><strong>Hours</strong></h4>
