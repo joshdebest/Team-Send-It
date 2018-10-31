@@ -8,12 +8,26 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var contactformsRouter = require('./routes/contactform');
 var announcementsRouter = require('./routes/announcement');
+var adminusersRouter = require('./routes/adminuser');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.all('/*', function(req, res, next) {
+  // CORS headers
+  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  if (req.method == 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    next();
+  }
+});
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/contactforms', contactformsRouter);
 app.use('/announcements', announcementsRouter);
+app.use('/adminusers', adminusersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
