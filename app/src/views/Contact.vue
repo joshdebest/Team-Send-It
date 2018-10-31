@@ -3,7 +3,7 @@
 
     <h2 class="title">Contact Us</h2>
       <div id="after_submit"></div>
-      <form id="contact_form" method="post" enctype="multipart/form-data">
+      <form id="contact_form">
 
         <div class="row" >
           <label class="required" for="name">Name:</label><br />
@@ -34,7 +34,7 @@
         </div>
 
         <div class="button">
-          <input id="submit_button" type="submit" align="left" v-on:click="submitMessage"/>
+          <button type="submit" v-on:click="submitMessage()">Submit</button>
         </div>
     </form>
 
