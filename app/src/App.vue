@@ -1,3 +1,4 @@
+
 <template>
   <div id="app">
     <Slides></Slides>
@@ -23,7 +24,6 @@
   color: #2c3e50;
 }
 #nav {
-
   font-size:140%;
   padding: 50px;
   text-align: right;
