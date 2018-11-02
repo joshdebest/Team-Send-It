@@ -2,41 +2,51 @@
   <div class="contact">
 
     <h2 class="title">Contact Us</h2>
-      <div id="after_submit"></div>
-      <form id="contact_form">
-
-        <div class="row" >
-          <label class="required" for="name">Name:</label><br />
-          <input id="name" class="input" name="name" type="text" value="" size="30"
-          v-model="Name"/><br />
+      <div id="after_submit">
+      <div class="container">
+      <form id="contact_form" class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-2 required" for="name">Name:</label>
+          <div class="col-sm-5">
+            <input id="name" class="form-control" name="name" placeholder="Name" type="text" value="" size="30"
+            v-model="Name"/>
+          </div>
           <span id="name_validation" class="error_message"></span>
         </div>
 
-        <div class="row" >
-          <label class="required" for="email">Email:</label><br />
-          <input id="email" class="input" name="email" type="text" value="" size="30"
-          v-model="Email"/><br />
+        <div class="form-group" >
+          <label class="control-label col-sm-2 required" for="email">Email:</label>
+          <div class="col-sm-5">
+            <input id="email" class="form-control" name="email" placeholder="Email" type="email" value="" size="30"
+            v-model="Email"/>
+          </div>
           <span id="email_validation" class="error_message"></span>
         </div>
 
-        <div class="row">
-          <label class="required" for="phone">Phone Number:</label><br />
-          <input id="phone" class="input" name="phone" type="text" value="" size="30"
-          v-model="PhoneNumber"/><br />
+        <div class="form-group">
+          <label class="control-label col-sm-2 required" for="phone">Phone Number:</label>
+          <div class="col-sm-5">
+            <input id="phone" class="form-control" name="phone" placeholder="Phone Number" type="text" value="" size="30"
+            v-model="PhoneNumber"/>
+          </div>
           <span id="phone_validation" class="error_message"></span>
         </div>
 
-        <div class="row">
-          <label class="required" for="message">Message:</label><br />
-          <textarea id="message" class="input" name="message" rows="7" cols="30"
-          v-model="Message"></textarea><br />
+        <div class="form-group">
+          <label class="control-label col-sm-2 required" for="message">Message:</label>
+          <div class="col-sm-5">
+            <textarea id="message" class="form-control" placeholder="Message" name="message" rows="7" cols="30"
+            v-model="Message"></textarea>
+          </div>
           <span id="message_validation" class="error_message"></span>
         </div>
 
         <div class="button">
-          <button type="submit" v-on:click="submitMessage()">Submit</button>
+          <button type="submit" class="btn btn-dark" v-on:click="submitMessage()">Submit</button>
         </div>
     </form>
+  </div>
+  </div>
 
     <h3 class="phone">Phone: 123-123-1234</h3>
 
@@ -58,9 +68,14 @@
   </div>
 </template>
 
+<style lang="scss">
+#after_submit {
+  text-align: left;
+}
+</style>
+
 <script>
 import ContactSubmissionService from '@/services/ContactSubmissionService';
-
 export default {
   data() {
     return {
@@ -70,7 +85,6 @@ export default {
       Message: '',
     };
   },
-
   methods: {
     async submitMessage() {
       const response = await ContactSubmissionService.submitMessage({
