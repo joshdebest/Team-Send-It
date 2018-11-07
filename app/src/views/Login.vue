@@ -85,12 +85,6 @@
                 })
             }
         }
-        // filters: {
-        //   json: function (value) {
-        //     console.log(value)
-        //     return value
-        //   }
-        // }
     }
 </script>
 
