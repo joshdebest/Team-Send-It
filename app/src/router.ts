@@ -41,5 +41,10 @@ export default new Router({
           name: 'bikes',
           component: () => import('./views/Bikes.vue'),
       },
+      {
+          path: '/item',
+          name: 'item',
+          component: () => import('./views/Item.vue'),
+      },
   ],
 });
