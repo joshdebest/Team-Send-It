@@ -1,39 +1,39 @@
-import Item from './Item.vue';
 <template>
-  <div id="app" class="container my-5">
-    <h1>My online store</h1>
-
-    <div class="row">
-      <div class="col-md-3" v-for="item in forSale">
-        <div class="card">
-          <img :src="item.image" :alt="item.name" class="card-img-top">
-          <div class="card-body">
-            <h4 class="card-title">{{ item.name }}</h4>
-            <div class="card-text">${{ item.price / 100 }}</div>
-            <div class="row justify-content-end">
-              <button class="btn btn-primary">Add to cart</button>
-            </div>
-          </div>
-        </div>
+  <div id="bikes" class="container my-5">
+    <div class="row mb-3">
+      <div class="col-md-9">
+    <h1>Bikes</h1>
+      </div>
+      <div class="col-md-3">
+        <ShoppingCart />
       </div>
     </div>
+
+    <div class="row">
+      <Item
+              v-for="item in forSale"
+              :key="item.invId"
+              :invId="item.invId"
+              :name="item.name"
+              :image="item.image"
+              :price="item.price" />
+    </div>
+
   </div>
 </template>
 
 <script>
+    import Item from './Item.vue';
+    import ShoppingCart from './ShoppingCart.vue';
     export default {
-        data() {
-            return {
-                forSale: [
-                    {invId: 1, name: 'An Item', image: '//placehold.it/200', price: 999},
-                    {invId: 2, name: 'Thing', image: '//placehold.it/200', price: 1499},
-                    {invId: 3, name: 'Doo-dad', image: '//placehold.it/200', price: 499},
-                    {invId: 4, name: 'Other thing', image: '//placehold.it/200', price: 299},
-                ],
-            };
+        name: 'bikes',
+        computed: {
+            forSale() { return this.$store.getters.forSale; },
+            inCart() { return this.$store.getters.inCart; },
         },
-        // components: {
-        //     Item,
-        // },
+        components: {
+            Item,
+            ShoppingCart,
+        },
     }
 </script>
