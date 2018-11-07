@@ -42,12 +42,13 @@
         </div>
 
         <div class="button">
-          <button type="submit" class="btn btn-dark" v-on:click="submitMessage()">Submit</button>
+          <button type="submit" class="btn btn-outline-secondary" v-on:click="submitMessage()">Submit</button>
         </div>
     </form>
   </div>
   </div>
 
+    <div class="container">
     <h3 class="phone">Phone: 123-123-1234</h3>
 
     <h4 class="hours" style="white-space: pre-wrap;"><strong>Hours</strong></h4>
@@ -66,6 +67,7 @@
       <br><br>We are located in the Foothill Plaza Shopping Center right next
       door to California Fresh Market.</p>
   </div>
+</div>
 </template>
 
 <style lang="scss">
