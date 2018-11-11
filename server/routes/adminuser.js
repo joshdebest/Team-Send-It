@@ -7,16 +7,36 @@ router.route('/')
     // get all admin and employee accounts
     .get((req, res) => {
         var opt = {};
-        if (req.params.Admin) {
+
+        // query by username for login
+        if (req.body.Username) {
             opt.where = {
-                Admin: req.params.Admin
+                Username: req.body.Username
             }
-        }
-        AdminUser.findAll(opt).then((adminusers) => {
-            res.json({
-                adminusers,
+
+            AdminUser.findOne(opt).then((adminuser) => {
+                if (adminuser && adminuser.Password === req.body.Password) {
+                    res.json(adminuser);
+                }
+                else {
+                    res.status(404);
+                }
             });
-        });
+        }
+
+        // query by admin status
+        if (req.body.admin) {
+            opt.where = {
+                admin: req.body.admin
+            }
+
+            // find by whether they are an admin or employee
+            AdminUser.findAll(opt).then((adminusers) => {
+                res.json({
+                    adminusers,
+                });
+            });
+        }
     })
 
     // create a new admin or employee account
@@ -37,7 +57,7 @@ router.route('/')
         });
     })
 
-router.route(':/id')
+router.route('/:id')
     // get a specific admin or employee by their id
     .get((req, res) => {
         const userId = req.params.id;

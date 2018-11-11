@@ -3,19 +3,16 @@
     <div class="row">
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
       <div class="col-med-4 col-sm-4 col-xs-12">
-        <form class="form-container">
+        <form class="form-container" @submit="login">
           <h1>LOGIN</h1>
+          <div class="alert alert-danger" v-if="error">{{ error }}</div>
           <div class="form-group">
             <label for="exampleInputEmail1">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+            <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
           </div>
           <button type="submit" class="btn btn-success btn-block">Submit</button>
         </form>
@@ -26,58 +23,59 @@
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                data: {
-                    body: {
-                        username: null,
-                        password: null
-                    },
-                    rememberMe: false
-                },
-                error: null
-            }
-        },
-        mounted () {
-            if (this.$auth.redirect()) {
-                console.log('Redirect from: ' + this.$auth.redirect().from.name)
-            }
-            // Can set query parameter here for auth redirect or just do it silently in login redirect.
-        },
-        methods: {
-            login () {
-                var redirect = this.$auth.redirect()
-                this.$auth.login({
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: this.data.body,
-                    rememberMe: this.data.rememberMe,
-                    redirect: {name: redirect ? redirect.from.name : 'Home'},
-                    success (res) {
-                        console.log('Auth Success')
-                        // console.log('Token: ' + this.$auth.token())
-                        // console.log(res)
-                    },
-                    error (err) {
-                        if (err.response) {
-                            // The request was made, but the server responded with a status code
-                            // that falls out of the range of 2xx
-                            // console.log(err.response.status)
-                            // console.log(err.response.data)
-                            // console.log(err.response.headers)
-                            this.error = err.response.data
-                        } else {
-                            // Something happened in setting up the request that triggered an Error
-                            console.log('Error', err.message)
-                        }
-                        console.log(err.config)
-                    }
-                })
-            }
+import LoginService from '@/services/LoginService'
+
+export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: false,
+    };
+  },
+  methods: {
+    async login (e) {
+      e.preventDefault()
+      this.error = ''
+
+      if (this.email === '' && this.password === '') {
+        this.error = 'Please enter your email and password'
+        return
+      }
+
+      if (this.email === '') {
+        this.error = 'Please enter your email'
+        return
+      }
+
+      if (this.password === '') {
+        this.error = 'Please enter your password'
+        return
+      }
+
+      // query AdminUsers table by username and password
+      await LoginService.Login({
+          Username: this.email,
+          Password: this.password
+      }).then((res) => {
+        console.log(res)
+        if (res.data.AdminUserId) {  // user logged in
+          this.$store.commit('login', res.data.AdminUserId)
+          this.$router.push('/')  // redirect to admin/employee page
         }
-    }
+        else {  // incorrect username or password
+          this.error = res.data.error
+        }
+      },
+      (error) => {
+        console.log(error)
+      });
+
+      this.email = ''
+      this.password = ''
+    },
+  },
+};
 </script>
 
 <style lang="scss">
