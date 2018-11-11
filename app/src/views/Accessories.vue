@@ -1,20 +1,41 @@
+import Item from './Item.vue';
 <template>
-  <div class="accessories">
+  <div id="app" class="container my-5">
+    <h1>Accesories</h1>
 
-    <h2 class="title">Accessories</h2>
-      <div id="after_submit"></div>
-      <form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
-    </form>
-
-    <h3 class="phone">Phone: 123-123-1234</h3>
-
-    <h4 class="hours" style="white-space: pre-wrap;"><strong>Hours</strong></h4>
-      <p style="white-space: pre-wrap;">Monday to Friday 10 AM - 6 PM<br>Saturday 10 AM - 5 PM<br>Sunday 12 PM - 5 PM</p>
-      <p style="white-space: pre-wrap;"><strong>*We will be closed on all national holidays</strong></p>
-
-    <h5 style="white-space: pre-wrap;"><strong>Location</strong></h5>
-    <p style="white-space: pre-wrap;"><a href="https://www.google.com/maps/place/Foothill+Cyclery/@35.293542,-120.6753547,17z/data=!3m1!4b1!4m5!3m4!1s0x80ecf051fdb9435b:0xb27885a863b62dae!8m2!3d35.293542!4d-120.673166"
-                                         target="_blank"><strong>767 East Foothill Blvd Ste B<br>San Luis Obispo, Ca 93405</strong></a>
-      <br><br>We are located in the Foothill Plaza Shopping Center right next door to California Fresh Market.</p>
+    <div class="row">
+      <div class="col-md-3" v-for="item in forSale">
+        <div class="card">
+          <img :src="item.image" :alt="item.name" class="card-img-top">
+          <div class="card-body">
+            <h4 class="card-title">{{ item.name }}</h4>
+            <div class="card-text">${{ item.price / 100 }}</div>
+            <div class="row justify-content-end">
+              <button class="btn btn-primary">Add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+    export default {
+        data() {
+            return {
+                forSale: [
+                    {invId: 1, name: 'Bike Lights', image: 'https://www.bogproducts.com/sports/wp-content/uploads/2016/03/mini-usb-lights.png', price: 1999},
+                    {invId: 2, name: 'Basket', image: '//placehold.it/200', price: 1499},
+                    {invId: 3, name: 'Helmet', image: '//placehold.it/200', price: 499},
+                    {invId: 4, name: 'Bike Tire', image: '//placehold.it/200', price: 1499},
+										{invId: 5, name: 'Tire Tube', image: '//placehold.it/200', price: 999},
+										{invId: 6, name: 'Other thing', image: '//placehold.it/200', price: 299},
+                ],
+            };
+        },
+        // components: {
+        //     Item,
+        // },
+    }
+</script>
