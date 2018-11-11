@@ -46,5 +46,10 @@ export default new Router({
           name: 'item',
           component: () => import('./views/Item.vue'),
       },
+      {
+        path: '/checkout',
+        name: 'checkout',
+        component: () => import('./views/Checkout.vue'),
+      },
   ],
 });
