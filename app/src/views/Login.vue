@@ -1,34 +1,26 @@
 <template>
-  <div class="content has-text-centered">
-    <h1 class="is-title is-bold">Admin Login</h1>
-
-    <div class="columns is-vcentered">
-      <div class="column is-6 is-offset-3">
-        <div class="box">
-          <div v-show="error" style="color:red; word-wrap:break-word;">{{ error }}</div>
-          <form v-on:submit.prevent="login">
-            <label class="label">Email</label>
-            <p class="control">
-              <input v-model="data.body.username" class="input" type="text" placeholder="email@example.org">
-            </p>
-            <label class="label">Password</label>
-            <p class="control">
-              <input v-model="data.body.password" class="input" type="password" placeholder="password">
-            </p>
-
-            <p class="control">
-              <label class="checkbox">
-                <input type="checkbox" v-model="data.rememberMe">
-                Remember me
-              </label>
-            </p>
-            <p class="control">
-              <button type="submit" class="button is-primary">Login</button>
-              <button class="button is-default">Cancel</button>
-            </p>
-          </form>
-        </div>
+  <div class="container-fluid bg">
+    <div class="row">
+      <div class="col-med-4 col-sm-4 col-xs-12"></div>
+      <div class="col-med-4 col-sm-4 col-xs-12">
+        <form class="form-container">
+          <h1>LOGIN</h1>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+          </div>
+          <button type="submit" class="btn btn-success btn-block">Submit</button>
+        </form>
       </div>
+      <div class="col-med-4 col-sm-4 col-xs-12"></div>
     </div>
   </div>
 </template>
@@ -85,17 +77,18 @@
                 })
             }
         }
-        // filters: {
-        //   json: function (value) {
-        //     console.log(value)
-        //     return value
-        //   }
-        // }
     }
 </script>
 
-<style lang="scss" scoped>
-  .is-title {
-    text-transform: capitalize;
-  }
+<style lang="scss">
+*{color: #ffff;}
+.bg{background: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Amazing-Bicycle-Background.jpg') no-repeat; width: 100%; height: 100vh; background-size: 1300px 900px;}
+@media (min-width: 1200px) {
+    .form-container{
+        padding: 50px 60px; margin-top: 20vh;
+        -webkit-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+    }
+}
 </style>
