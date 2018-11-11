@@ -1,25 +1,15 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('AdminUsers', {
+    return queryInterface.createTable('Sessions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Name: {
-        type: Sequelize.STRING
-      },
-      Username: {
-        type: Sequelize.STRING,
-        unique: true
-      },
-      Password: {
-        type: Sequelize.STRING
-      },
-      Admin: {
-        type: Sequelize.BOOLEAN
+      Expiration: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -28,10 +18,18 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      AdminuserId: {
+        type: Sequelize.INTEGER,
+        unique: true,
+        references: {
+          model: 'AdminUsers',
+          key: 'id'
+        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('AdminUsers');
+    return queryInterface.dropTable('Sessions');
   }
 };

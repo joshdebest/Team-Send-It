@@ -4,12 +4,12 @@
     <h2 class="title">Contact Us</h2>
       <div id="after_submit">
       <div class="container">
-      <form id="contact_form" class="form-horizontal">
+      <form id="contact_form" class="form-horizontal" @submit="onSubmit">
         <div class="form-group">
           <label class="control-label col-sm-2 required" for="name">Name:</label>
           <div class="col-sm-5">
             <input id="name" class="form-control" name="name" placeholder="Name" type="text" value="" size="30"
-            v-model="Name"/>
+            v-model="Name" required/>
           </div>
           <span id="name_validation" class="error_message"></span>
         </div>
@@ -17,8 +17,8 @@
         <div class="form-group" >
           <label class="control-label col-sm-2 required" for="email">Email:</label>
           <div class="col-sm-5">
-            <input id="email" class="form-control" name="email" placeholder="Email" type="email" value="" size="30"
-            v-model="Email"/>
+            <input id="email" class="form-control" name="email" placeholder="test@email.com" type="email" value="" size="30"
+            v-model="Email" required/>
           </div>
           <span id="email_validation" class="error_message"></span>
         </div>
@@ -26,8 +26,8 @@
         <div class="form-group">
           <label class="control-label col-sm-2 required" for="phone">Phone Number:</label>
           <div class="col-sm-5">
-            <input id="phone" class="form-control" name="phone" placeholder="Phone Number" type="text" value="" size="30"
-            v-model="PhoneNumber"/>
+            <input id="phone" class="form-control" name="phone" placeholder="123-456-7890" type="tel"
+            value="" size="30" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" v-model="PhoneNumber" required/>
           </div>
           <span id="phone_validation" class="error_message"></span>
         </div>
@@ -36,13 +36,13 @@
           <label class="control-label col-sm-2 required" for="message">Message:</label>
           <div class="col-sm-5">
             <textarea id="message" class="form-control" placeholder="Message" name="message" rows="7" cols="30"
-            v-model="Message"></textarea>
+            v-model="Message" required></textarea>
           </div>
           <span id="message_validation" class="error_message"></span>
         </div>
 
         <div class="button">
-          <button type="submit" class="btn btn-dark" v-on:click="submitMessage()">Submit</button>
+          <button type="submit" class="btn btn-dark">Submit</button>
         </div>
     </form>
   </div>
@@ -93,7 +93,19 @@ export default {
         PhoneNumber: this.PhoneNumber,
         Message: this.Message,
       });
-      console.log(response.data);
+    },
+    onSubmit(e) {
+      e.preventDefault();
+
+      var form = document.getElementById('contact_form');
+      if (form.checkValidity()) {
+        this.submitMessage();
+
+        this.Name = ''
+        this.Email = ''
+        this.PhoneNumber = ''
+        this.Message = ''
+      }
     },
   },
 };
