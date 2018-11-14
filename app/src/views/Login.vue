@@ -1,95 +1,92 @@
 <template>
-  <div class="content has-text-centered">
-    <h1 class="is-title is-bold">Admin Login</h1>
-
-    <div class="columns is-vcentered">
-      <div class="column is-6 is-offset-3">
-        <div class="box">
-          <div v-show="error" style="color:red; word-wrap:break-word;">{{ error }}</div>
-          <form v-on:submit.prevent="login">
-            <label class="label">Email</label>
-            <p class="control">
-              <input v-model="data.body.username" class="input" type="text" placeholder="email@example.org">
-            </p>
-            <label class="label">Password</label>
-            <p class="control">
-              <input v-model="data.body.password" class="input" type="password" placeholder="password">
-            </p>
-
-            <p class="control">
-              <label class="checkbox">
-                <input type="checkbox" v-model="data.rememberMe">
-                Remember me
-              </label>
-            </p>
-            <p class="control">
-              <button type="submit" class="button is-primary">Login</button>
-              <button class="button is-default">Cancel</button>
-            </p>
-          </form>
-        </div>
+  <div class="container-fluid bg">
+    <div class="row">
+      <div class="col-med-4 col-sm-4 col-xs-12"></div>
+      <div class="col-med-4 col-sm-4 col-xs-12">
+        <form class="form-container" @submit="login">
+          <h1>LOGIN</h1>
+          <div class="alert alert-danger" v-if="error">{{ error }}</div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email</label>
+            <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-success btn-block">Submit</button>
+        </form>
       </div>
+      <div class="col-med-4 col-sm-4 col-xs-12"></div>
     </div>
   </div>
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                data: {
-                    body: {
-                        username: null,
-                        password: null
-                    },
-                    rememberMe: false
-                },
-                error: null
-            }
-        },
-        mounted () {
-            if (this.$auth.redirect()) {
-                console.log('Redirect from: ' + this.$auth.redirect().from.name)
-            }
-            // Can set query parameter here for auth redirect or just do it silently in login redirect.
-        },
-        methods: {
-            login () {
-                var redirect = this.$auth.redirect()
-                this.$auth.login({
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: this.data.body,
-                    rememberMe: this.data.rememberMe,
-                    redirect: {name: redirect ? redirect.from.name : 'Home'},
-                    success (res) {
-                        console.log('Auth Success')
-                        // console.log('Token: ' + this.$auth.token())
-                        // console.log(res)
-                    },
-                    error (err) {
-                        if (err.response) {
-                            // The request was made, but the server responded with a status code
-                            // that falls out of the range of 2xx
-                            // console.log(err.response.status)
-                            // console.log(err.response.data)
-                            // console.log(err.response.headers)
-                            this.error = err.response.data
-                        } else {
-                            // Something happened in setting up the request that triggered an Error
-                            console.log('Error', err.message)
-                        }
-                        console.log(err.config)
-                    }
-                })
-            }
+import LoginService from '@/services/LoginService'
+
+export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: false,
+    };
+  },
+  methods: {
+    async login (e) {
+      e.preventDefault()
+      this.error = ''
+
+      if (this.email === '' && this.password === '') {
+        this.error = 'Please enter your email and password'
+        return
+      }
+
+      if (this.email === '') {
+        this.error = 'Please enter your email'
+        return
+      }
+
+      if (this.password === '') {
+        this.error = 'Please enter your password'
+        return
+      }
+
+      // query AdminUsers table by username and password
+      await LoginService.Login({
+          Username: this.email,
+          Password: this.password
+      }).then((res) => {
+        console.log(res)
+        if (res.data.AdminUserId) {  // user logged in
+          this.$store.commit('login', res.data.AdminUserId)
+          this.$router.push('/')  // redirect to admin/employee page
         }
-    }
+        else {  // incorrect username or password
+          this.error = res.data.error
+        }
+      },
+      (error) => {
+        console.log(error)
+      });
+
+      this.email = ''
+      this.password = ''
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-  .is-title {
-    text-transform: capitalize;
-  }
+<style lang="scss">
+*{color: #ffff;}
+.bg{background: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Amazing-Bicycle-Background.jpg') no-repeat; width: 100%; height: 100vh; background-size: 1300px 900px;}
+@media (min-width: 1200px) {
+    .form-container{
+        padding: 50px 60px; margin-top: 20vh;
+        -webkit-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
+    }
+}
 </style>

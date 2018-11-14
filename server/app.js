@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var contactformsRouter = require('./routes/contactform');
 var announcementsRouter = require('./routes/announcement');
 var adminusersRouter = require('./routes/adminuser');
+var loginRouter = require('./routes/login');
 
 var app = express();
 
@@ -18,11 +19,11 @@ app.set('view engine', 'pug');
 
 app.all('/*', function(req, res, next) {
   // CORS headers
-  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  // Set custom headers for CORS
-  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
-  if (req.method == 'OPTIONS') {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+  if (req.method === 'OPTIONS') {
     res.status(200).end();
   } else {
     next();
@@ -40,6 +41,7 @@ app.use('/users', usersRouter);
 app.use('/contactforms', contactformsRouter);
 app.use('/announcements', announcementsRouter);
 app.use('/adminusers', adminusersRouter);
+app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
