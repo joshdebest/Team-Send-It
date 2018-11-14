@@ -45,7 +45,7 @@ describe('/adminusers', () => {
       });
     });
 
-    it('should return an item with a specific name', () => {
+    it('should return an item that is an admin', () => {
         return AdminUser.create({
             Admin: true,
         }).then((item) => {
@@ -96,11 +96,11 @@ describe('/adminusers', () => {
             return request(app)
                 .put(rootPath + '/' + item.id)
                 .send({
-                    Title: 'updatedtest',
+                    Name: 'updatedtest',
                 })
                 .expect(200)
                 .then((response) => {
-                    return expect(response.body.Title).toEqual('updatedtest');
+                    return expect(response.body.Name).toEqual('updatedtest');
                 });
         });
     });

@@ -23,6 +23,7 @@
               <b-nav-item href="/services">SERVICE AND REPAIRS</b-nav-item>
               <b-nav-item href="/contact">CONTACT</b-nav-item>
               <b-nav-item href="/login">LOGIN</b-nav-item>
+              <b-nav-item href="/checkout"><img src="https://www.drones4.life/wp-content/uploads/2016/12/shopping-cart-logo-icon-70706.png" style= "width:30px; height:30px"></b-nav-item>
             </b-navbar-nav>
           </b-navbar-nav>
 
