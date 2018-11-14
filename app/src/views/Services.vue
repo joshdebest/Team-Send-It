@@ -19,7 +19,7 @@
       <div class="service_texts" style = margin-left:0px;>
           <p style="white-space: pre-wrap;"><strong>FRONT END</strong><br>Adjust headset<br>Overhaul headset<br>Replace headset<br>Replace handlebars<br>Replace stem<br>Replace handlebar tape<br>Replace handlebar grips</p>
           <p style="white-space: pre-wrap;"><strong>FRAME &amp; FORK</strong><br>Check/align dropouts<br>Replace fork<br>Suspension fork overhaul<br>Rear shock air sleeve<br>Frame preparation for assembly (thread chase &amp; face)<br>Derailleur hanger repair/replacement</p>
-      </div>    
+      </div>
     </div>
   </div>
 </template>
