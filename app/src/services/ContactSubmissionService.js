@@ -1,7 +1,7 @@
 import api from './api';
 
 export default {
-  submitMessage (contactForm) {
+  submitMessage(contactForm) {
       return api().post('contactforms', contactForm);
   },
 };

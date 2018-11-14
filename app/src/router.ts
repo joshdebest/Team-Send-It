@@ -1,8 +1,11 @@
 import Vue from 'vue';
+import VueAxios from 'vue-axios';
+import axios from 'axios';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 
 Vue.use(Router);
+Vue.use(VueAxios, axios);
 
 export default new Router({
   mode: 'history',
