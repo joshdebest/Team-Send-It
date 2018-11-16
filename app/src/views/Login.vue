@@ -79,10 +79,11 @@ export default {
 </script>
 
 <style lang="scss">
-*{color: #ffff;}
+
 .bg{background: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Amazing-Bicycle-Background.jpg') no-repeat; width: 100%; height: 100vh; background-size: 1300px 900px;}
 @media (min-width: 1200px) {
     .form-container{
+       *{color: #ffff;}
         padding: 50px 60px; margin-top: 20vh;
         -webkit-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
         -moz-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
