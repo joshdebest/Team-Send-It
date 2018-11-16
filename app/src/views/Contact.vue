@@ -1,13 +1,22 @@
 <template>
   <div class="contact">
+    <div class="container hero">
+    <div class="Hero-container Hero--textCenter Container ">
+        <div class="Hero-copy Typography">
+            <h1>Contact Us</h1>
+        </div>
+    </div>
+  </div>
 
-    <h2 class="title">Contact Us</h2>
+<section style="padding: 1.3125rem 0!important;">
       <div id="after_submit">
-      <div class="container">
+      <div class="container-fluid">
+        <div class="row">
+        <div class="col">
       <form id="contact_form" class="form-horizontal" @submit="onSubmit">
         <div class="form-group">
           <label class="control-label col-sm-2 required" for="name">Name:</label>
-          <div class="col-sm-5">
+          <div class="col-sm-10">
             <input id="name" class="form-control" name="name" placeholder="Name" type="text" value="" size="30"
             v-model="Name" required/>
           </div>
@@ -16,7 +25,7 @@
 
         <div class="form-group" >
           <label class="control-label col-sm-2 required" for="email">Email:</label>
-          <div class="col-sm-5">
+          <div class="col-sm-10">
             <input id="email" class="form-control" name="email" placeholder="test@email.com" type="email" value="" size="30"
             v-model="Email" required/>
           </div>
@@ -24,8 +33,8 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label col-sm-2 required" for="phone">Phone Number:</label>
-          <div class="col-sm-5">
+          <label class="control-label col-sm-4 required" for="phone">Phone Number:</label>
+          <div class="col-sm-10">
             <input id="phone" class="form-control" name="phone" placeholder="123-456-7890" type="tel"
             value="" size="30" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" v-model="PhoneNumber" required/>
           </div>
@@ -34,7 +43,7 @@
 
         <div class="form-group">
           <label class="control-label col-sm-2 required" for="message">Message:</label>
-          <div class="col-sm-5">
+          <div class="col-sm-10">
             <textarea id="message" class="form-control" placeholder="Message" name="message" rows="7" cols="30"
             v-model="Message" required></textarea>
           </div>
@@ -42,13 +51,13 @@
         </div>
 
         <div class="button">
-          <button type="submit" class="btn btn-outline-secondary">Submit</button>
+          <button type="submit" class="btn btn-success col-sm-10">Submit</button>
         </div>
     </form>
   </div>
-  </div>
 
-    <div class="container">
+<div class="col">
+
     <h3 class="phone">Phone: 123-123-1234</h3>
 
     <h4 class="hours" style="white-space: pre-wrap;"><strong>Hours</strong></h4>
@@ -68,12 +77,26 @@
       door to California Fresh Market.</p>
   </div>
 </div>
+</div>
+</div>
+</section>
+</div>
 </template>
 
 <style lang="scss">
+*{color: black;}
+.hero{background: url('http://www.achieve3000.com/wp-content/uploads/2015/02/contact-us-hero.jpg') no-repeat;
+  max-width: 100%;
+  max-height: 100vh;
+  background-size: 1300px 900px;
+  overflow: hidden;
+  padding: 120px;
+  *{color: white;}
+}
 #after_submit {
   text-align: left;
 }
+
 </style>
 
 <script>
