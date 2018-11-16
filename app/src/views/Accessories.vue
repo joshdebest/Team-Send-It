@@ -39,3 +39,9 @@ import Item from './Item.vue';
         // },
     }
 </script>
+
+<style lang="scss">
+  .card-body{
+    color: black;
+  }
+</style>
