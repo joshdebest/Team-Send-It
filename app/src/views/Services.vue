@@ -25,6 +25,7 @@
 </template>
 
 <style lang="scss">
+  *{color: black;}
   #services_paragraphs{
     font-size: 300%;
   }
