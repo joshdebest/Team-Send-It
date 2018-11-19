@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navigation />
     <b-carousel id="carousel1"
                 style="text-shadow: 1px 1px 2px #333;"
                 controls
@@ -190,7 +191,10 @@
 </style>
 
 <script>
+import Navigation from './Navigation'
+
 export default {
+  name: 'App',
   data() {
     return {
       slide: 0,
@@ -205,5 +209,8 @@ export default {
       this.sliding = false;
     },
   },
+  components: {
+    Navigation
+  }
 };
 </script>

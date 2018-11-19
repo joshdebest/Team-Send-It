@@ -1,32 +1,128 @@
 <template>
-  <div class="services_&_repairs">
-    <h2 class="title">Service & Repairs</h2>
-      <div id="after_submit"></div>
-      <form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
-      </form>
-    <img src = "http://sidehustlehq.com/wp-content/uploads/2017/07/bicyclerepair.jpg"
-        style = "width: 450px; height: 300px;">
-    <img src = "http://www.ridesonair.com/images/full-sized/professional-bike-workshop.jpg"
-        style = "width: 450px; height: 300px;">
-    <h3 class="phone">PICKUP AND DELIVERY AVAILABLE! - CALL STORE FOR DETAILS!</h3>
+<div>
+  <Navigation />
+  <div class="servicesrepairs">
+    <h2 class="title">Services &amp; Repairs</h2>
     <br>
-    <h3 class="phone">List of services below:</h3>
     <div class="services_paragraphs" >
-      <div class="service_texts" style = margin:0px;>
-          <p class="text-center"><strong>SERVICE PACKAGES</strong><br>Minor tune-up<br>Major tune-up<br>Drivetrain overhaul<br>Brake overhaul<br>Complete bicycle overhaul<br>Complete bearing overhaul<br>Electric bike service<br>Bosch eBike drivetrain service<br>Detail bike: thoroughly clean bicycle and components; polish and wax bicycle</p>
-          <p class="text-center"><strong>BRAKES</strong><br>Replace brake cable(s)<br>Replace brake shoes<br>Minor brake adjustment<br>Major brake adjustment<br>Bleed hydraulic disc brakes<br>Disc-brake rotor repair<br>Hydraulic disc brake line repair/replace<br>Install and adjust new brakes</p>
+      <div class="service_texts">
+        <div align="left" class="packages">
+          <h3>SERVICE PACKAGES</h3>
+          <ul class="services">
+            <li class="service">Minor tune-up</li>
+            <li class="service">Major tune-up</li>
+            <li class="service">Drivetrain overhaul</li>
+            <li class="service">Brake overhaul</li>
+            <li class="service">Complete bicycle overhaul</li>
+            <li class="service">Complete bearing overhaul</li>
+            <li class="service">Electric bike service</li>
+            <li class="service">Bosch eBike drivetrain service</li>
+          </ul>
+        </div>
+        <div align="left" class="brakes">
+          <h3>BRAKES</h3>
+          <ul class="services">
+            <li class="service">Replace brake cable(s)</li>
+            <li class="service">Replace brake shoes</li>
+            <li class="service">Minor brake adjustment</li>
+            <li class="service">Major brake adjustment</li>
+            <li class="service">Bleed hydraulic disc brakes</li>
+            <li class="service">Disc-brake rotor repair</li>
+            <li class="service">Hydraulic disc brake line repair/replace</li>
+            <li class="service">Install and adjust new brakes</li>
+          </ul>
+        </div>
+        <div align="left" class="frontend">
+          <h3>FRONT END</h3>
+          <ul class="services">
+            <li class="service">Adjust headset</li>
+            <li class="service">Overhaul headset</li>
+            <li class="service">Replace headset</li>
+            <li class="service">Replace handlebars</li>
+            <li class="service">Replace stem</li>
+            <li class="service">Replace handlebar tape</li>
+            <li class="service">Replace handlebar grips</li>
+          </ul>
+        </div>
+        <div align="left" class="frame">
+          <h3>FRAME &amp; FORK</h3>
+          <ul class="services">
+            <li class="service">Check/align dropouts</li>
+            <li class="service">Replace fork</li>
+            <li class="service">Suspension fork overhaul</li>
+            <li class="service">Rear shock air sleeve</li>
+            <li class="service">Frame preparation for assembly (thread chase &amp; face)</li>
+            <li class="service">Derailleur hanger repair/replacement</li>
+          </ul>
+        </div>
       </div>
-      <div class="service_texts" style = margin-left:0px;>
-          <p style="white-space: pre-wrap;"><strong>FRONT END</strong><br>Adjust headset<br>Overhaul headset<br>Replace headset<br>Replace handlebars<br>Replace stem<br>Replace handlebar tape<br>Replace handlebar grips</p>
-          <p style="white-space: pre-wrap;"><strong>FRAME &amp; FORK</strong><br>Check/align dropouts<br>Replace fork<br>Suspension fork overhaul<br>Rear shock air sleeve<br>Frame preparation for assembly (thread chase &amp; face)<br>Derailleur hanger repair/replacement</p>
-      </div>
+      <div class="img"><img src = "http://sidehustlehq.com/wp-content/uploads/2017/07/bicyclerepair.jpg"
+          style = "width: 450px; height: 300px;"></div>
+      <div class="img"><img src = "http://www.ridesonair.com/images/full-sized/professional-bike-workshop.jpg"
+          style = "width: 450px; height: 300px;"></div>
     </div>
+    <h3 class="phone">PICKUP AND DELIVERY AVAILABLE! - CALL STORE FOR DETAILS!</h3>
   </div>
+</div>
 </template>
+
+<script>
+import Navigation from './Navigation';
+
+export default {
+  name: 'App',
+  components: {
+    Navigation
+  }
+}
+</script>
 
 <style lang="scss">
   *{color: black;}
   #services_paragraphs{
     font-size: 300%;
+  }
+  .title {
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 48px;
+  }
+  .servicesrepairs {
+    margin-top: 50px;
+  }
+  .service_texts {
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 100px;
+    float: left;
+  }
+  .service_texts h3{
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .service {
+    font-weight: lighter;
+  }
+  .packages {
+    margin-bottom: 50px;
+  }
+  .brakes {
+    margin-bottom: 50px;
+  }
+  .frontend {
+    margin-bottom: 50px;
+  }
+  .frame {
+    margin-bottom: 50px;
+  }
+  .phone {
+    clear: both;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .img {
+    padding-top: 60px;
+    margin-bottom: 140px;
   }
 </style>

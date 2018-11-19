@@ -34,25 +34,50 @@ export default new Router({
       name: 'services',
       component: () => import('./views/Services.vue'),
     },
-      {
-          path: '/login',
-          name: 'login',
-          component: () => import('./views/Login.vue'),
-      },
-      {
-          path: '/bikes',
-          name: 'bikes',
-          component: () => import('./views/Bikes.vue'),
-      },
-      {
-          path: '/item',
-          name: 'item',
-          component: () => import('./views/Item.vue'),
-      },
-      {
-        path: '/checkout',
-        name: 'checkout',
-        component: () => import('./views/Checkout.vue'),
-      },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/Login.vue'),
+    },
+    {
+      path: '/bikes',
+      name: 'bikes',
+      component: () => import('./views/Bikes.vue'),
+    },
+    {
+      path: '/item',
+      name: 'item',
+      component: () => import('./views/Item.vue'),
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: () => import('./views/Checkout.vue'),
+    },
+    {
+      path: '/employee',
+      name: 'employee',
+      component: () => import('./views/Employee.vue'),
+    },
+    {
+      path: '/accounts',
+      name: 'accounts',
+      component: () => import('./views/Accounts.vue'),
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: () => import('./views/Orders.vue'),
+    },
+    {
+      path: '/manageitems',
+      name: 'manageitems',
+      component: () => import('./views/ManageItems.vue'),
+    },
+    {
+      path: '/accountinfo',
+      name: 'accountinfo',
+      component: () => import('./views/AccountInfo.vue'),
+    }
   ],
 });

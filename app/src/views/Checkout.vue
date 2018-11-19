@@ -1,4 +1,6 @@
 <template>
+<div>
+    <Navigation />
     <div class = "row">
         <div class = "col-md-6">
         <br>
@@ -29,15 +31,15 @@
                     <label for="InputZipcode">ZIP code</label>
                     <input type="zipcode" class="form-control" id="InputZipcode">
                 </div>
-            </form>  
+            </form>
         </div>
         <div class = "col-md-6">
         <br>
             <form class="form-container">
-                <h1>Review Order</h1> 
+                <h1>Review Order</h1>
                 <button type="submit" class="btn btn-success btn-block">Place Order</button>
             </form>
-            <br>  
+            <br>
             <form class="form-container">
                 <h2>Card Information</h2>
                 <div class="form-group">
@@ -59,7 +61,19 @@
             </form>
         </div>
     </div>
+</div>
 </template>
+
+<script>
+import Navigation from './Navigation';
+
+export default {
+    name: 'App',
+    components: {
+      Navigation
+    }
+}
+</script>
 
 <style lang="scss">
   .row{
@@ -67,7 +81,7 @@
   }
   @media (min-width: 1200px) {
     .form-container{
-        padding: 20px 60px; 
+        padding: 20px 60px;
         box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.50);
         text-align: left;
     }

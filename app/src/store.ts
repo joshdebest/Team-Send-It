@@ -16,6 +16,7 @@ export default new Vuex.Store({
     inCart: [],
   },
   getters: {
+    id: state => state.id,
     forSale: state => state.forSale,
     inCart: state => state.inCart,
   },
