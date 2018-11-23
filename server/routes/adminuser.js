@@ -6,37 +6,11 @@ const router = express.Router();
 router.route('/')
     // get all admin and employee accounts
     .get((req, res) => {
-        var opt = {};
-
-        // query by username for login
-        if (req.body.Username) {
-            opt.where = {
-                Username: req.body.Username
-            }
-
-            AdminUser.findOne(opt).then((adminuser) => {
-                if (adminuser && adminuser.Password === req.body.Password) {
-                    res.json(adminuser);
-                }
-                else {
-                    res.status(404);
-                }
+        AdminUser.findAll().then((adminusers) => {
+            res.json({
+                adminusers,
             });
-        }
-
-        // query by admin status
-        if (req.body.admin) {
-            opt.where = {
-                admin: req.body.admin
-            }
-
-            // find by whether they are an admin or employee
-            AdminUser.findAll(opt).then((adminusers) => {
-                res.json({
-                    adminusers,
-                });
-            });
-        }
+        });
     })
 
     // create a new admin or employee account
