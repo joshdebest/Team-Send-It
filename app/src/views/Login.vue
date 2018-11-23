@@ -14,7 +14,7 @@
             <label for="exampleInputPassword1">Password</label>
             <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
           </div>
-          <button type="submit" class="btn btn-success btn-block">Submit</button>
+          <button type="submit" class="btn btn-success btn-block">Login</button>
         </form>
       </div>
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
