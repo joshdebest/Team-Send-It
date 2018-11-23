@@ -65,6 +65,7 @@ export default {
         console.log(res)
         if (res.data.AdminUserId) {  // user logged in
           this.$store.commit('login', res.data.AdminUserId)
+          localStorage.setItem("token", res.data.AdminUserId)
           this.$router.push('/employee')  // redirect to admin/employee page
         }
         else {  // incorrect username or password

@@ -43,155 +43,61 @@
       </b-carousel-slide>
     </b-carousel>
 
-
-    <div id="announcements-container">
-        <div id="announcements">
-          Announcements
-        </div>
-        <div id="announcements_body">
-          Most of us remember learning to ride a bike when we were kids,
-          falling and scraping our knees, trying over and over again to get the
-          balance right. But what we remember most of all is that glorious feeling
-          when our parents let go and we just kept going! Never falling, and
-          feeling like we could ride off on a cloud of success into the sunset.
-          <br>
-          <br>
-          Then however, we got older and we forgot about the triumphant and
-          peaceful feelings bike riding could bring us. We got busy and may
-          never even have bothered to get an adult bike after we outgrew our childhood one.
-          <br>
-          <br>
-          Or, maybe you never forgot this feeling, maybe you’ve been riding your
-          bike every day for years, enjoying that feeling of freedom, and now your
-          beloved bike is worn out and you are in desperate need of a new one.
-          <br>
-          <br>
-          You’re going to come to Foxycle! Why? We are offering an amazing
-          sales on bikes that will get you out there experiencing
-          life to the fullest in no time!
-        </div>
+    <div class="section">
+      <div class="container">
+        <h2>Announcements</h2>
+        <b-list-group>
+          <b-list-group-item v-for="announcement in announcements" class="flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ announcement.title }}</h5>
+            </div>
+            <small>{{ announcement.message }}</small>
+          </b-list-group-item>
+        </b-list-group>
       </div>
-      <div id="about-us-container">
-        <div id="about-us">
-          About Us
-        </div>
-        <div id="about-us_body">
-          We Are Foxylce and we are the premier seller of bikes, components, and services.
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <h2>About Us</h2>
+        <p class="about-text">We Are Foxycle and we are the premier seller of bikes, components, and services.
           We carry mid-ranged priced bikes and no branded merchandise. Our website offers
            all the support that you need. But if you are still unsure with your decision
           come on in and we will be happy to help. Our in-store services range from
           installations to full bike service. We hope you enjoy our company because
-          we will definitely enjoy yours!
-        </div>
+          we will definitely enjoy yours!</p>
+          <img width=35% src="https://www.spinlister.com/blog/wp-content/uploads/2017/01/best-bike-shop-5.jpg">
       </div>
     </div>
+  </div>
 </template>
 
 <style lang="scss">
-
-#announcements-container {
-    margin: 30px auto;
-    position: relative;
-    width: 1230px;
-    height: 420px;
-    padding: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+.section {
+  padding: 40px;
+}
+.container {
+  border: 1px solid #b5b5b5;
+  padding: 10px;
+  padding-left: 20px;
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
 }
 
-#announcements-container > div {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+.about-text {
+    float: left;
+    margin-left: 10px;
+    margin-top: 30px;
+    width: 50%;
 }
-#announcements {
-  font-size:300%;
-  padding-top: 20px;
-  padding-left: 30px;
-  padding-bottom: 60px;
-  font-weight: bold;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-}
-
-
-#announcements_body {
-  margin: 30px auto;
-  position: absolute;
-  top: 10px;
-  width: 1050px;
-  height: 25px;
-  padding: 60px;
-  font-size:100%;
-  font-weight: bold;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-}
-
-#announcements_body > div {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-}
-
-#about-us-container {
-    margin: 30px auto;
-    position: relative;
-    width: 1230px;
-    height: 220px;
-    padding: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
-}
-
-#about-us-container > div {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-}
-#about-us {
-  font-size:300%;
-  padding-top: 20px;
-  padding-left: 30px;
-  padding-bottom: 60px;
-  font-weight: bold;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-}
-
-
-#about-us_body {
-  margin: 30px auto;
-  position: absolute;
-  top: 10px;
-  width: 1050px;
-  height: 25px;
-  padding: 60px;
-  font-size:100%;
-  font-weight: bold;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
+.container img {
+    margin-left: 100px;
+    padding: 20px;
 }
 </style>
 
 <script>
 import Navigation from './Navigation'
+import GetAnnouncementsService from '@/services/GetAnnouncementsService'
 
 export default {
   name: 'App',
@@ -199,7 +105,28 @@ export default {
     return {
       slide: 0,
       sliding: null,
+      announcements: [{title: "Bike Giveaway", message: "Come to the Foxycle bike shop to enter to win a bike."},
+                      {title: "Stomp on the Step Twin, a folding bike for riders who don’t like pedaling circles",
+                       message: "Put this StepTwin bike under the category of wacky bicycle inventions that are oddly entertaining to watch, maybe even something you'd actually want to try - if only to see what it feels like to ride."}]
     };
+  },
+  created: async function() {
+    const annmnts = await GetAnnouncementsService.GetAnnouncements().then(annmnts => {
+      console.log(annmnts.data.announcements);
+      return annmnts.data.announcements;
+    }).catch(error => console.log(error));
+
+    this.announcements = new Array();
+
+    // loop through all users and map user info to table
+    for (var i = 0; i < annmnts.length; i++) {
+      const announcement = {
+        title: annmnts[i]['Title'],
+        message: annmnts[i]['Message'],
+      };
+
+      this.announcements[i] = announcement;
+    }
   },
   methods: {
     onSlideStart(slide) {

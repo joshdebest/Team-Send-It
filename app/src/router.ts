@@ -78,6 +78,11 @@ export default new Router({
       path: '/accountinfo',
       name: 'accountinfo',
       component: () => import('./views/AccountInfo.vue'),
-    }
+    },
+    {
+      path: '/pageinfo',
+      name: 'pageinfo',
+      component: () => import('./views/PageInfo.vue'),
+    },
   ],
 });

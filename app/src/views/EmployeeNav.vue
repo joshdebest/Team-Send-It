@@ -18,6 +18,7 @@
                     <h2 v-model="user">{{ user }}</h2>
                     <b-dropdown-item href="/orders">View Orders</b-dropdown-item>
                     <b-dropdown-item href="/manageitems">Manage Items</b-dropdown-item>
+                    <b-dropdown-item href="/pageinfo">Page Info</b-dropdown-item>
                     <b-dropdown-item href="/accounts">View Employees</b-dropdown-item>
                     <b-dropdown-item href="/accountinfo">Account Info</b-dropdown-item>
                     <b-dropdown-item v-on:click="logout" href="/">Sign Out</b-dropdown-item>
@@ -46,16 +47,17 @@ export default {
     },
     methods: {
       async logout () {
-        const adminUserId = this.$store.state.id
+        const adminUserId = localStorage.getItem("token");
 
         await LogoutService.Logout(adminUserId).then(response => {
             console.log(response)
         });
 
         this.$store.commit('logout');
+        localStorage.removeItem("token");
       },
       async fetchUser () {
-        const adminUserId = this.$store.state.id
+        const adminUserId = localStorage.getItem("token");
 
         await GetUserService.GetUser(adminUserId).then(response => {
           this.user = response.data.Username
