@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     logged_in: false,
-    id: 0
+    id: 0,
     forSale: [
       { invId: 1, name: 'An Item', image: '//placehold.it/200', price: 999 },
       { invId: 2, name: 'Thing', image: '//placehold.it/200', price: 1499 },
@@ -16,6 +16,7 @@ export default new Vuex.Store({
     inCart: [],
   },
   getters: {
+    id: state => state.id,
     forSale: state => state.forSale,
     inCart: state => state.inCart,
   },
@@ -27,7 +28,7 @@ export default new Vuex.Store({
     logout(state) {
       state.logged_in = false
     },
-    ADD_TO_CART(state, invId) { state.inCart.push(invId); },
+    ADD_TO_CART(state, invId) { state.inCart.push(invId) }
   },
   actions: {
       addToCart(context, invId) { context.commit('ADD_TO_CART', invId);},

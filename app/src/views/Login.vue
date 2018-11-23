@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Navigation />
   <div class="container-fluid bg">
     <div class="row">
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
@@ -20,10 +22,12 @@
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-import LoginService from '@/services/LoginService'
+import Navigation from './Navigation';
+import LoginService from '@/services/LoginService';
 
 export default {
   data () {
@@ -61,7 +65,8 @@ export default {
         console.log(res)
         if (res.data.AdminUserId) {  // user logged in
           this.$store.commit('login', res.data.AdminUserId)
-          this.$router.push('/')  // redirect to admin/employee page
+          localStorage.setItem("token", res.data.AdminUserId)
+          this.$router.push('/employee')  // redirect to admin/employee page
         }
         else {  // incorrect username or password
           this.error = res.data.error
@@ -75,6 +80,9 @@ export default {
       this.password = ''
     },
   },
+  components: {
+    Navigation
+  }
 };
 </script>
 

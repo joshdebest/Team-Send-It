@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Navigation />
   <div class="contact">
     <div class="container hero">
     <div class="Hero-container Hero--textCenter Container ">
@@ -81,6 +83,7 @@
 </div>
 </section>
 </div>
+</div>
 </template>
 
 <style lang="scss">
@@ -93,6 +96,11 @@
   padding: 120px;
   *{color: white;}
 }
+
+.Hero-copy {
+ text-align: center;
+}
+
 #after_submit {
   text-align: left;
 }
@@ -100,8 +108,10 @@
 </style>
 
 <script>
+import Navigation from './Navigation';
 import ContactSubmissionService from '@/services/ContactSubmissionService';
 export default {
+  name: 'App',
   data() {
     return {
       Name: '',
@@ -133,5 +143,8 @@ export default {
       }
     },
   },
+  components: {
+    Navigation
+  }
 };
 </script>
