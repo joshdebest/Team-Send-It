@@ -28,14 +28,14 @@ module.exports = {
       OrderId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'orders',
+          model: 'Orders',
           key: 'id'
         }
       },
       ProductId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'products',
+          model: 'Products',
           key: 'id'
         }
       }
