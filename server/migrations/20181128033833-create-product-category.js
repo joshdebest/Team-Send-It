@@ -21,14 +21,16 @@ module.exports = {
         references: {
           model: 'products',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       },
       CategoryId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'categories',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       }
     });
   },

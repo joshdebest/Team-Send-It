@@ -29,11 +29,11 @@
 
           <label for="category"><b>Categories</b></label><br>
           <div class="category-list" v-for="cat in categories">
-            <input id="checkbox" v-model="category" type="checkbox" name="category" v-bind:id="cat.id"> {{ cat.name }}
+            <input id="checkbox" v-model="cat.checked" type="checkbox" name="category" v-bind:id="cat.id"> {{ cat.name }}
           </div>
 
           <div class="clearfix">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <button type="button" v-on:click="cancel('id01', 'CProduct')" class="cancelbtn">Cancel</button>
             <button type="submit" class="signupbtn">Add Product</button>
           </div>
         </div>
@@ -58,6 +58,41 @@
         </tr>
       </table>
     </div>
+
+    <div id="id02" class="modal">
+      <form id="CProduct2" class="modal-content" @submit.prevent="updateProduct">
+        <div class="container">
+          <h1>Update Product</h1>
+          <p>Please fill in this form to update a product.</p>
+          <hr>
+          <label for="name"><b>Name</b></label>
+          <input type="text" placeholder="Enter Name" name="name"  v-model="updateName" required>
+
+          <label for="price"><b>Price</b></label>
+          <input type="text" placeholder="Enter Price" name="price" v-model="updatePrice" required>
+
+          <label for="qty"><b>Quantity</b></label>
+          <input type="text" placeholder="Enter Quantity" name="qty" v-model="updateQty" required>
+
+          <label for="imglink"><b>Image Link</b></label><br>
+          <input type="text" placeholder="Enter Image Link" name="imglink" v-model="updateImglink" required>
+
+          <label for="description"><b>Description</b></label><br>
+          <textarea id="description" class="form-control" placeholder="Enter Descripton" name="description" rows="7" cols="30"
+          v-model="updateDescription" required></textarea>
+
+          <label for="category"><b>Categories</b></label><br>
+          <div class="category-list" v-for="cat in categories">
+            <input id="checkbox" v-model="cat.checked" type="checkbox" name="category" v-bind:id="cat.id"> {{ cat.name }}
+          </div>
+
+          <div class="clearfix">
+            <button type="button" v-on:click="cancel('id02', 'CProduct2')" class="cancelbtn">Cancel</button>
+            <button type="submit" class="signupbtn">Update Product</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -69,6 +104,7 @@ import CreateProductService from '@/services/CreateProductService';
 import RemoveProductService from '@/services/RemoveProductService';
 import GetCategoriesService from '@/services/GetCategoriesService';
 import GetCategoryService from '@/services/GetCategoryService';
+import UpdateProductService from '@/services/UpdateProductService';
 
 export default {
   name: 'App',
@@ -79,6 +115,11 @@ export default {
       qty: "",
       imglink: "",
       description: "",
+      updateName: "",
+      updatePrice: "",
+      updateQty: "",
+      updateImglink: "",
+      updateDescription: "",
       categories: ["Bikes", "Accessories", "Clothing", "Tools"],
       rows: [{id: 1, name: "Mountain Bike", price: 1000, qty: 10},
             {id: 2, name: "Helmet", price: 30, qty: 4},
@@ -120,7 +161,8 @@ export default {
       for (var i = 0; i < cats.length; i++) {
         const category = {
           id: cats[i]['id'],
-          name: cats[i]['Name']
+          name: cats[i]['Name'],
+          checked: false
         }
 
         this.categories[i] = category;
@@ -131,10 +173,11 @@ export default {
 
       var form = document.getElementById("CProduct");
       var selectedCategories = new Array();
-
+      console.log("hello")
       for (var i = 0; i < form.category.length; i++) {
         if (form.category[i].type == 'checkbox') {
           if (form.category[i].checked == true) {
+            this.categories[i].checked = true;
             const categoryName = await GetCategoryService.GetCategory(form.category[i].id).then(catName => {
               selectedCategories.push(catName.data.Name)
             })
@@ -174,6 +217,76 @@ export default {
 
       location.reload();
     },
+    async getProduct(productId) {
+      this.open('id02');
+
+      // get the announcement that was clicked on in table
+      const currentProduct = await GetProductService.GetProduct(productId).then(response => {
+        console.log(response.data);
+        this.updateId = response.data.product.id;
+        this.updateName = response.data.product.Name;
+        this.updatePrice = response.data.product.Price;
+        this.updateQty = response.data.product.Qty;
+        this.updateDescription = response.data.product.Description;
+        this.updateImglink = response.data.product.ImageLink;
+
+        // select the checkboxes of the product's current categories
+        var catList = response.data.categories;
+
+        for (var i = 0; i < catList.length; i++) {
+            for (var j = 0; j < this.categories.length; j++) {
+                if (catList[i].CategoryId === this.categories[j].id) {
+                    this.categories[j].checked = true;
+                }
+            }
+        }
+      }).catch(error => console.log(error));
+    },
+    async updateProduct() {
+        var form = document.getElementById("CProduct2");
+        var selectedCategories = new Array();
+
+        // get the categories that were selected
+        for (var i = 0; i < form.category.length; i++) {
+          if (form.category[i].type == 'checkbox') {
+            if (form.category[i].checked == true) {
+              this.categories[i].checked = true;
+              const categoryName = await GetCategoryService.GetCategory(form.category[i].id).then(catName => {
+                selectedCategories.push(catName.data.Name)
+              });
+            }
+          }
+        }
+
+        //update the product that was clicked on in table
+        await UpdateProductService.UpdateProduct(this.updateId, {
+          Name: this.updateName,
+          Price: this.updatePrice,
+          Qty: this.updateQty,
+          Description: this.updateDescription,
+          ImageLink: this.updateImglink,
+          categoryList: selectedCategories
+        }).then(updatedProduct => {
+          console.log(updatedProduct)
+        }).catch(error => console.log(error));
+
+        location.reload();
+    },
+    cancel(modalId, formId) {
+        // clear form data
+        this.name = "";
+        this.price = "";
+        this.qty = "";
+        this.descripton = "";
+        this.imglink = "";
+
+        console.log(this.categories)
+        for (var i = 0; i < this.categories.length; i++) {
+            this.categories[i].checked = false;
+        }
+
+        document.getElementById(modalId).style.display='none';
+    }
   },
   components: {
     EmployeeNav
@@ -182,11 +295,15 @@ export default {
 
 // Get the modal
 var modal = document.getElementById('id01');
+var modal2 = document.getElementById('id02');
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
+    }
+    if (event.target == modal2) {
+        modal2.style.display = "none";
     }
 }
 </script>
