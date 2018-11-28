@@ -6,10 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     DateOrdered: DataTypes.DATE,
     TrackingNumber: DataTypes.STRING,
     OrderNumber: DataTypes.INTEGER,
-    Total: DataTypes.INTEGER
+    Status: DataTypes.STRING,
+    Total: DataTypes.FLOAT
   }, {});
   Order.associate = function(models) {
-    // associations can be defined here
+    Order.hasOne(models.BillingAddress);
+    Order.hasMany(models.Product);
   };
   return Order;
 };

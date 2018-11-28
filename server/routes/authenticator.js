@@ -9,7 +9,7 @@ const Auth = {
           if (!foundSession) {
             foundSession = Session.build();
           }
-          foundSession.expiration = new Date(new Date().getTime() + 30 * 60000);
+          foundSession.Expiration = new Date(new Date().getTime() + 30 * 60000);
           foundSession.save().then(updatedSession => adminuser.setSession(updatedSession));
           return foundSession;
       });
@@ -27,9 +27,9 @@ const Auth = {
     adminuser.getSession().then(
       session => {
         if (session) {
-          if (session.expiration.getTime() > new Date().getTime()) {
+          if (session.Expiration.getTime() > new Date().getTime()) {
             const updateSession = session;
-            updateSession.expiration = new Date(new Date().getTime() + 30 * 60000);
+            updateSession.Expiration = new Date(new Date().getTime() + 30 * 60000);
             return session.save().then(() => true);
           }
           return this.logout(adminuser).then(() => false);

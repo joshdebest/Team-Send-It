@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Navigation />
   <div class="container-fluid bg">
     <div class="row">
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
@@ -20,10 +22,12 @@
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-import LoginService from '@/services/LoginService'
+import Navigation from './Navigation';
+import LoginService from '@/services/LoginService';
 
 export default {
   data () {
@@ -61,7 +65,8 @@ export default {
         console.log(res)
         if (res.data.AdminUserId) {  // user logged in
           this.$store.commit('login', res.data.AdminUserId)
-          this.$router.push('/')  // redirect to admin/employee page
+          localStorage.setItem("token", res.data.AdminUserId)
+          this.$router.push('/employee')  // redirect to admin/employee page
         }
         else {  // incorrect username or password
           this.error = res.data.error
@@ -75,14 +80,18 @@ export default {
       this.password = ''
     },
   },
+  components: {
+    Navigation
+  }
 };
 </script>
 
 <style lang="scss">
-*{color: #ffff;}
+
 .bg{background: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Amazing-Bicycle-Background.jpg') no-repeat; width: 100%; height: 100vh; background-size: 1300px 900px;}
 @media (min-width: 1200px) {
     .form-container{
+       *{color: #ffff;}
         padding: 50px 60px; margin-top: 20vh;
         -webkit-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
         -moz-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
