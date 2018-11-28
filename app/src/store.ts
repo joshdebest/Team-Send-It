@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     logged_in: false,
-    id: 0
+    id: 0,
     forSale: [
       { invId: 1, name: 'An Item', image: '//placehold.it/200', price: 999 },
       { invId: 2, name: 'Thing', image: '//placehold.it/200', price: 1499 },
