@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       OrderId: {
-        type: INTEGER,
+        type: Sequelize.INTEGER,
         unique: true,
         references: {
           model: 'Orders',

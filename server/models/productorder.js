@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     Date: DataTypes.DATE
   }, {});
   ProductOrder.associate = function(models) {
-
+    ProductOrder.belongsTo(models.Order);
   };
   return ProductOrder;
 };

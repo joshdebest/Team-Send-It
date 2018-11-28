@@ -9,14 +9,14 @@
           <h1>LOGIN</h1>
           <div class="alert alert-danger" v-if="error">{{ error }}</div>
           <div class="form-group">
-            <label for="exampleInputEmail1">Email</label>
+            <label for="exampleInputEmail1">Email:</label>
             <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
+            <label for="exampleInputPassword1">Password:</label>
             <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
           </div>
-          <button type="submit" class="btn btn-success btn-block">Submit</button>
+          <button type="submit" class="btn btn-success btn-block">Login</button>
         </form>
       </div>
       <div class="col-med-4 col-sm-4 col-xs-12"></div>
@@ -97,5 +97,9 @@ export default {
         -moz-box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
         box-shadow: 0px 0px 26px 11px rgba(0,0,0,0.75);
     }
+}
+h1{
+  text-align: center;
+   font-family: Avenir Next;
 }
 </style>
