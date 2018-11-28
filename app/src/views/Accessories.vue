@@ -2,7 +2,7 @@ import Item from './Item.vue';
 <template>
 <div>
   <Navigation />
-  <div id="app" class="container my-5">
+  <div id="app" class="accessories-container my-5">
     <h1>Accesories</h1>
 
     <div class="row">

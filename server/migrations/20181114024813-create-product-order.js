@@ -26,10 +26,16 @@ module.exports = {
         type: Sequelize.DATE
       },
       OrderId: {
-        type: INTEGER,
-        unique: true,
+        type: Sequelize.INTEGER,
         references: {
           model: 'orders',
+          key: 'id'
+        }
+      },
+      ProductId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'products',
           key: 'id'
         }
       }

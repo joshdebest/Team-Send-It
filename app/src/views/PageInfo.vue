@@ -1,7 +1,7 @@
 <template>
 <div>
   <EmployeeNav />
-  <h2 class="title">Announcements Managment</h2>
+  <h2 class="title">Announcements Management</h2>
 
   <button class="create-announcement" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Create Announcement</button>
 
@@ -62,6 +62,42 @@
       </div>
     </form>
   </div>
+
+  <h2 class="title">Categories Management</h2>
+
+  <button class="create-announcement" onclick="document.getElementById('id03').style.display='block'" style="width:auto;">Create Category</button>
+
+  <div id="id03" class="modal">
+    <form class="modal-content" @submit="createCategory">
+      <div class="container">
+        <h1>Create Category</h1>
+        <p>Please fill in this form to create a category.</p>
+        <hr>
+        <label for="title"><b>Category</b></label>
+        <input v-model="category" type="text" placeholder="Enter Category" name="category" required>
+
+        <div class="clearfix">
+          <button type="button" onclick="document.getElementById('id03').style.display='none'" class="cancelbtn">Cancel</button>
+          <button type="submit" class="signupbtn">Create Category</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class='announcement-table'>
+    <table align="center">
+      <tr>
+        <th>Id</th>
+        <th>Category</th>
+        <th>Remove Category</th>
+      </tr>
+      <tr v-for="catrow in catrows" :key="catrow.id">
+        <td>{{ catrow.id }}</td>
+        <td>{{ catrow.category }}</td>
+        <td><button class="remove" v-on:click="removeCategory(catrow.id)">Remove</button></td>
+      </tr>
+    </table>
+  </div>
 </div>
 </template>
 
@@ -72,6 +108,9 @@ import GetAnnouncementService from '@/services/GetAnnouncementService';
 import CreateAnnouncementService from '@/services/CreateAnnouncementService';
 import RemoveAnnouncementService from '@/services/RemoveAnnouncementService';
 import UpdateAnnouncementService from '@/services/UpdateAnnouncementService';
+import GetCategoriesService from '@/services/GetCategoriesService';
+import CreateCategoryService from '@/services/CreateCategoryService';
+import RemoveCategoryService from '@/services/RemoveCategoryService';
 
 export default {
   data () {
@@ -81,8 +120,11 @@ export default {
       updateId: "",
       updateTitle: "",
       updateMessage: "",
+      category: "",
       rows: [{id: 1, title: "This is a test", message: "This is a test"},
-             {id: 2, title: "This should work", message: "Hello this should work"}]
+             {id: 2, title: "This should work", message: "Hello this should work"}],
+      catrows: [{id: 1, category: "Bikes"},
+                {id: 2, category: "Accessories"}]
     }
   },
   created: async function() {
@@ -102,6 +144,23 @@ export default {
         };
 
         this.rows[i] = announcement;
+      }
+
+      const cats = await GetCategoriesService.GetCategories().then(cats => {
+        console.log(cats.data.categories);
+        return cats.data.categories
+      }).catch(error => console.log(error));
+
+      this.catrows = new Array();
+
+      // loop through all announcements and map announcement info to table
+      for (var i = 0; i < cats.length; i++) {
+        const category = {
+          id: cats[i]['id'],
+          category: cats[i]['Name'],
+        };
+
+        this.catrows[i] = category;
       }
   },
   methods: {
@@ -151,6 +210,32 @@ export default {
         console.log(updatedAnnouncement)
       }).catch(error => console.log(error));
     },
+    async removeCategory(categoryId) {
+      await RemoveCategoryService.RemoveCategory(categoryId).then(response => {
+        console.log(response)
+      }).catch(error => console.log(error));
+
+      location.reload();
+    },
+    async createCategory() {
+      await CreateCategoryService.CreateCategory({
+        Name: this.category,
+      }).then(category => {
+        console.log(category)
+      });
+
+      // clear form data
+      var i;
+      for (i = 0; (i < document.forms.length); i++) {
+        document.forms[i].reset();
+      }
+
+      // close register modal
+      var modal = document.getElementById('id03');
+      modal.style.display = "none";
+
+      this.$router.push('/pageinfo');
+    },
   },
   components: {
     EmployeeNav
@@ -159,11 +244,15 @@ export default {
 
 // Get the modal
 var modal1 = document.getElementById('id01');
+var modal2 = document.getElementById('id03');
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal1) {
         modal1.style.display = "none";
+    }
+    if (event.target == modal3) {
+        modal3.style.display = "none";
     }
 }
 </script>
