@@ -1,9 +1,14 @@
 <template>
 <div>
   <Navigation />
+  <div class="container hero">
+  <div class="Hero-container Hero--textCenter Container ">
+      <div class="Hero-copy Typography">
+          <h0>Services &amp; Repairs</h0>
+      </div>
+  </div>
+</div>
   <div class="servicesrepairs">
-    <h2 class="title">Services &amp; Repairs</h2>
-    <br>
     <div class="services_paragraphs" >
       <div class="service_texts">
         <div align="left" class="packages">
@@ -78,6 +83,21 @@ export default {
 </script>
 
 <style lang="scss">
+.hero{background: url('https://bikedoctorhhi.com/wp-content/uploads/2015/07/bike-repair-2.jpg') no-repeat;
+  max-width: 100%;
+  max-height: 100vh;
+  background-size: 1300px 900px;
+  overflow: hidden;
+  padding: 70px;
+  *{color: white;}
+}
+.Hero-copy {
+ text-align: center;
+ font-family: Avenir Next;
+}
+h0 {
+  font-size: 100px;
+}
   *{color: black;}
   #services_paragraphs{
     font-size: 300%;

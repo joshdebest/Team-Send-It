@@ -5,7 +5,7 @@
     <div class="container hero">
     <div class="Hero-container Hero--textCenter Container ">
         <div class="Hero-copy Typography">
-            <h1>Contact Us</h1>
+            <h0>Contact Us</h0>
         </div>
     </div>
   </div>
@@ -93,13 +93,17 @@
   max-height: 100vh;
   background-size: 1300px 900px;
   overflow: hidden;
-  padding: 120px;
+  padding: 70px;
   *{color: white;}
 }
-
+h0 {
+  font-size: 100px;
+}
 .Hero-copy {
  text-align: center;
+  font-family: Avenir Next;
 }
+
 
 #after_submit {
   text-align: left;
