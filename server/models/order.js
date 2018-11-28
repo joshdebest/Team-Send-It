@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Order.associate = function(models) {
     Order.hasOne(models.BillingAddress);
-    Order.hasMany(models.Product);
+    Order.hasMany(models.ProductOrder);
   };
   return Order;
 };

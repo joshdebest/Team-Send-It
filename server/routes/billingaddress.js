@@ -5,16 +5,6 @@ const router = express.Router();
 
 //
 router.route('/')
-    // get first 10 billing address entries
-    .get((req, res) => {
-        var opt = {limit: 10};
-        BillingAddress.findAll(opt).then((billingaddresses) => {
-            res.json({
-                billingaddresses,
-            });
-        });
-    })
-
     // create a new billing address entry
     .post((req, res) => {
         const {
