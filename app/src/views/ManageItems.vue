@@ -3,10 +3,10 @@
     <EmployeeNav />
     <h2 class="title">Product Management</h2>
 
-    <button class="add-product" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Add Product</button>
+    <button class="add-product" v-on:click="open('id01')" style="width:auto;">Add Product</button>
 
     <div id="id01" class="modal">
-      <form class="modal-content" @submit="register">
+      <form id="CProduct" class="modal-content" @submit="addProduct">
         <div class="container">
           <h1>Add Product</h1>
           <p>Please fill in this form to add a new product.</p>
@@ -29,7 +29,7 @@
 
           <label for="category"><b>Categories</b></label><br>
           <div class="category-list" v-for="cat in categories">
-            <input  id="checkbox" v-model="category" type="checkbox" name="admin"> {{ cat }}
+            <input id="checkbox" v-model="category" type="checkbox" name="category" v-bind:id="cat.id"> {{ cat.name }}
           </div>
 
           <div class="clearfix">
@@ -49,7 +49,7 @@
           <th>Quantity</th>
           <th>Remove Product</th>
         </tr>
-        <tr v-for="row in rows" :key="row.id">
+        <tr v-for="row in rows" :key="row.id" v-on:click="getProduct(row.id)">
           <td>{{ row.id }}</td>
           <td>{{ row.name }}</td>
           <td>${{ row.price }}</td>
@@ -67,6 +67,8 @@ import GetProductsService from '@/services/GetProductsService';
 import GetProductService from '@/services/GetProductService';
 import CreateProductService from '@/services/CreateProductService';
 import RemoveProductService from '@/services/RemoveProductService';
+import GetCategoriesService from '@/services/GetCategoriesService';
+import GetCategoryService from '@/services/GetCategoryService';
 
 export default {
   name: 'App',
@@ -77,7 +79,6 @@ export default {
       qty: "",
       imglink: "",
       description: "",
-      categories: [],
       categories: ["Bikes", "Accessories", "Clothing", "Tools"],
       rows: [{id: 1, name: "Mountain Bike", price: 1000, qty: 10},
             {id: 2, name: "Helmet", price: 30, qty: 4},
@@ -105,18 +106,53 @@ export default {
     }
   },
   methods: {
-    async register(e) {
-      this.admin = document.getElementById('checkbox').checked
+    async open(id) {
+      document.getElementById(id).style.display='block'
+
+      const cats = await GetCategoriesService.GetCategories().then(cats => {
+        console.log(cats.data.categories);
+        return cats.data.categories
+      }).catch(error => console.log(error));
+
+      this.categories = new Array();
+
+      // loop through all announcements and map announcement info to table
+      for (var i = 0; i < cats.length; i++) {
+        const category = {
+          id: cats[i]['id'],
+          name: cats[i]['Name']
+        }
+
+        this.categories[i] = category;
+      }
+    },
+    async addProduct(e) {
+      e.preventDefault();
+
+      var form = document.getElementById("CProduct");
+      var selectedCategories = new Array();
+
+      for (var i = 0; i < form.category.length; i++) {
+        if (form.category[i].type == 'checkbox') {
+          if (form.category[i].checked == true) {
+            const categoryName = await GetCategoryService.GetCategory(form.category[i].id).then(catName => {
+              selectedCategories.push(catName.data.Name)
+            })
+          }
+        }
+      }
+      console.log(selectedCategories)
 
       await CreateProductService.CreateProduct({
         Name: this.name,
         Price: this.price,
         Qty: this.qty,
         Description: this.description,
-        ImageLink: this.imglink
+        ImageLink: this.imglink,
+        categoryList: selectedCategories
       }).then(product => {
         console.log(product)
-      });
+    }).catch(error => console.log(error));
 
       // clear form data
       var i;
@@ -124,14 +160,12 @@ export default {
         document.forms[i].reset();
       }
 
-      // not working...
-      document.getElementById("checkbox").checked = false;
-
       // close register modal
       var modal = document.getElementById('id01');
       modal.style.display = "none";
 
       this.$router.push('/manageitems');
+      location.reload();
     },
     async removeProduct(productId) {
       await RemoveProductService.RemoveProduct(productId).then(response => {
