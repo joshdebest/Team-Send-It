@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Navigation />
   <div id="bikes" class="container my-5">
     <div class="row mb-3">
       <div class="col-md-9">
@@ -20,9 +22,11 @@
     </div>
 
   </div>
+</div>
 </template>
 
 <script>
+    import Navigation from './Navigation';
     import Item from './Item.vue';
     import ShoppingCart from './ShoppingCart.vue';
     export default {
@@ -34,6 +38,13 @@
         components: {
             Item,
             ShoppingCart,
+            Navigation
         },
     }
 </script>
+
+<style lang="scss">
+  .card-body{
+    color: black;
+  }
+</style>

@@ -1,5 +1,7 @@
 import Item from './Item.vue';
 <template>
+<div>
+  <Navigation />
   <div id="app" class="container my-5">
     <h1>Accesories</h1>
 
@@ -18,10 +20,14 @@ import Item from './Item.vue';
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
+import Navigation from './Navigation';
+
     export default {
+        name: 'App',
         data() {
             return {
                 forSale: [
@@ -37,5 +43,14 @@ import Item from './Item.vue';
         // components: {
         //     Item,
         // },
+        components: {
+          Navigation
+        }
     }
 </script>
+
+<style lang="scss">
+  .card-body{
+    color: black;
+  }
+</style>
