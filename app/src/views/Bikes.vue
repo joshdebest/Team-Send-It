@@ -1,6 +1,6 @@
 <template>
 <div>
-  <Navigation />
+  <Navigation/>
   <div id="bikes" class="bike-container my-5">
     <div class="row mb-3">
       <div class="col-md-9">
