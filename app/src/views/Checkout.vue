@@ -37,7 +37,7 @@
         <br>
             <form class="form-container">
                 <h1>Review Order</h1>
-                <button type="submit" class="btn btn-success btn-block">Place Order</button>
+                <button type="submit" class="btn btn-success btn-block" v-on:click="order">Place Order</button>
             </form>
             <br>
             <form class="form-container">
@@ -69,6 +69,12 @@ import Navigation from './Navigation';
 
 export default {
     name: 'App',
+    methods: {
+      order (e) {
+        e.preventDefault();
+        this.$router.push('/ordercomplete')
+      }
+    },
     components: {
       Navigation
     }

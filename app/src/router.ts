@@ -55,6 +55,11 @@ export default new Router({
       component: () => import('./views/Checkout.vue'),
     },
     {
+      path: '/ordercomplete',
+      name: 'ordercomplete',
+      component: () => import('./views/OrderComplete.vue'),
+    },
+    {
       path: '/employee',
       name: 'employee',
       component: () => import('./views/Employee.vue'),

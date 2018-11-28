@@ -1,14 +1,14 @@
 const express = require('express');
 const { Product } = require('../models');
+const { Category } = require('../models');
 
 const router = express.Router();
 
 //
 router.route('/')
-    // get first 10 products
+    // get all products
     .get((req, res) => {
-        var opt = {limit: 10};
-        Product.findAll(opt).then((products) => {
+        Product.findAll().then((products) => {
             res.json({
                 products,
             });
@@ -22,17 +22,30 @@ router.route('/')
             Price,
             Qty,
             Description,
-            ImageLink
+            ImageLink,
+            categoryList
         } = req.body;
+
         // validate potentially here
-        Product.create({
+        const newProduct = Product.build({
             Name,
             Price,
             Qty,
             Description,
-            ImageLink
-        }).then((product) => {
-            res.json(product);
+            ImageLink,
+        });
+
+        newProduct.save().then(() => {
+            for(var i = 0; i < categoryList.length; i++) {
+                const category = categoryList[i];
+
+                Category.findOne({ where: { Name: category } }).then((cat) => {
+                    newProduct.addCategory(cat);
+                    newProduct.save();
+                });
+            }
+
+            res.json(newProduct);
         });
     });
 

@@ -8,9 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Category: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -18,6 +15,20 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      ProductId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'products',
+          key: 'id'
+        }
+      },
+      CategoryId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'categories',
+          key: 'id'
+        }
       }
     });
   },
