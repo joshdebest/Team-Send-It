@@ -27,7 +27,6 @@ router.route('/')
             categoryList
         } = req.body;
 
-        // validate potentially here
         const newProduct = Product.build({
             Name,
             Price,
