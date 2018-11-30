@@ -1,56 +1,70 @@
-import Item from './Item.vue';
 <template>
 <div>
-  <Navigation />
-  <div id="app" class="accessories-container my-5">
-    <h1>Accesories</h1>
-
-    <div class="row">
-      <div class="col-md-3" v-for="item in forSale">
-        <div class="card">
-          <img :src="item.image" :alt="item.name" class="card-img-top">
-          <div class="card-body">
-            <h4 class="card-title">{{ item.name }}</h4>
-            <div class="card-text">${{ item.price / 100 }}</div>
-            <div class="row justify-content-end">
-              <button class="btn btn-primary">Add to cart</button>
-            </div>
-          </div>
-        </div>
+  <Navigation/>
+  <div id="bikes" class="bike-container my-5">
+    <div class="row mb-3">
+      <div class="col-md-9">
+    <h1>Accessories</h1>
+      </div>
+      <div class="col-md-3">
+        <ShoppingCart />
       </div>
     </div>
+
+    <div class="row">
+      <Item
+              v-for="item in forSale"
+              :key="item.id"
+              :id="item.id"
+              :Name="item.Name"
+              :ImageLink="item.ImageLink"
+              :Price="item.Price"
+              :Description="item.Description" />
+    </div>
+
   </div>
 </div>
 </template>
 
 <script>
-import Navigation from './Navigation';
+    import Navigation from './Navigation';
+    import Item from './Item.vue';
+    import ShoppingCart from './ShoppingCart.vue';
+    import GetAccessoriesService from '@/services/GetAccessoriesService';
 
     export default {
-        name: 'App',
-        data() {
+        name: 'bikes',
+        data () {
             return {
-                forSale: [
-                    {invId: 1, name: 'Bike Lights', image: 'https://www.bogproducts.com/sports/wp-content/uploads/2016/03/mini-usb-lights.png', price: 1999},
-                    {invId: 2, name: 'Basket', image: '//placehold.it/200', price: 1499},
-                    {invId: 3, name: 'Helmet', image: '//placehold.it/200', price: 499},
-                    {invId: 4, name: 'Bike Tire', image: '//placehold.it/200', price: 1499},
-										{invId: 5, name: 'Tire Tube', image: '//placehold.it/200', price: 999},
-										{invId: 6, name: 'Other thing', image: '//placehold.it/200', price: 299},
-                ],
+                items: [{id: 1, Name: "bike", ImageLink: "https://media.performancebike.com/images/performance/products/product-hi/31-7055-GRY-ANGLE.jpg?resize=1500px:1500px&output-quality=100", Price: 100, Description: "hello"}],
             };
         },
-        // components: {
-        //     Item,
-        // },
+        created: async function(){
+            const products = await GetAccessoriesService.GetAccessories().then(response => {
+                console.log(response.data);
+                return response.data;
+            });
+
+            this.$store.dispatch('addToForSale', products);
+        },
+        computed: {
+            forSale() { return this.$store.getters.forSale; },
+            inCart() { return this.$store.getters.inCart; },
+        },
         components: {
-          Navigation
-        }
+            Item,
+            ShoppingCart,
+            Navigation
+        },
     }
 </script>
 
 <style lang="scss">
   .card-body{
     color: black;
+  }
+  .row {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 </style>

@@ -14,11 +14,12 @@
     <div class="row">
       <Item
               v-for="item in forSale"
-              :key="item.invId"
-              :invId="item.invId"
-              :name="item.name"
-              :image="item.image"
-              :price="item.price" />
+              :key="item.id"
+              :id="item.id"
+              :Name="item.Name"
+              :ImageLink="item.ImageLink"
+              :Price="item.Price"
+              :Description="item.Description" />
     </div>
 
   </div>
@@ -29,8 +30,23 @@
     import Navigation from './Navigation';
     import Item from './Item.vue';
     import ShoppingCart from './ShoppingCart.vue';
+    import GetBikesService from '@/services/GetBikesService';
+
     export default {
         name: 'bikes',
+        data () {
+            return {
+                items: [{id: 1, Name: "bike", ImageLink: "https://media.performancebike.com/images/performance/products/product-hi/31-7055-GRY-ANGLE.jpg?resize=1500px:1500px&output-quality=100", Price: 100, Description: "hello"}],
+            };
+        },
+        created: async function(){
+            const products = await GetBikesService.GetBikes().then(response => {
+                console.log(response.data);
+                return response.data;
+            });
+
+            this.$store.dispatch('addToForSale', products);
+        },
         computed: {
             forSale() { return this.$store.getters.forSale; },
             inCart() { return this.$store.getters.inCart; },
@@ -46,5 +62,9 @@
 <style lang="scss">
   .card-body{
     color: black;
+  }
+  .row {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 </style>

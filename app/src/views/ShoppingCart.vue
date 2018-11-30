@@ -15,8 +15,8 @@
             <table class="table">
               <tbody>
               <tr v-for="(item, index) in cart">
-                <td>{{ item.name }}</td>
-                <td>{{ item.price | dollars }}</td>
+                <td>{{ item.Name }}</td>
+                <td>{{ item.Price | dollars }}</td>
                 <td>
                   <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">&times;</button>
                 </td>
@@ -48,16 +48,16 @@
             cart() {
                 return this.$store.getters.inCart.map((cartItem) => {
                     return this.$store.getters.forSale.find((forSaleItem) => {
-                        return cartItem === forSaleItem.invId;
+                        return cartItem === forSaleItem.id;
                     });
                 });
             },
             total() {
-                return this.cart.reduce((acc, cur) => acc + cur.price, 0);
+                return this.cart.reduce((acc, cur) => acc + cur.Price, 0);
             },
         },
         filters: {
-            dollars: num => `${num / 100}`,
+            dollars: num => `${num}`,
         },
         methods: {
             removeFromCart(index) { this.$store.dispatch('removeFromCart', index); },

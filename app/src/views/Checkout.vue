@@ -73,6 +73,7 @@
 
 <script>
 import Navigation from './Navigation';
+import CreateOrderService from '@/services/CreateOrderService';
 
 export default {
     name: 'App',
