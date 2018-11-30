@@ -19,16 +19,18 @@ module.exports = {
       ProductId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'products',
+          model: 'Products',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       },
       CategoryId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'categories',
+          model: 'Categories',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       }
     });
   },

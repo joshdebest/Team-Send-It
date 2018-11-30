@@ -7,12 +7,7 @@ export default new Vuex.Store({
   state: {
     logged_in: false,
     id: 0,
-    forSale: [
-      { invId: 1, name: 'An Item', image: '//placehold.it/200', price: 999 },
-      { invId: 2, name: 'Thing', image: '//placehold.it/200', price: 1499 },
-      { invId: 3, name: 'Doo-dad', image: '//placehold.it/200', price: 499 },
-      { invId: 4, name: 'Other thing', image: '//placehold.it/200', price: 299 },
-    ],
+    forSale: [],
     inCart: [],
   },
   getters: {
@@ -28,10 +23,22 @@ export default new Vuex.Store({
     logout(state) {
       state.logged_in = false
     },
-    ADD_TO_CART(state, invId) { state.inCart.push(invId) },
-      REMOVE_FROM_CART(state, index) { state.inCart.splice(index, 1); },
+    ADD_TO_CART(state, invId) {
+        state.inCart.push(invId)
+    },
+    REMOVE_FROM_CART(state, index) {
+        state.inCart.splice(index, 1);
+    },
+    CREATE_CART(state, cart) {
+        state.inCart = cart;
+    },
+    ADD_TO_FOR_SALE(state, items) {
+        state.forSale = items;
+    }
   },
   actions: {
+      createCart(context, cart) { context.commit('CREATE_CART', cart); },
+      addToForSale(context, items) { context.commit('ADD_TO_FOR_SALE', items); },
       addToCart(context, invId) { context.commit('ADD_TO_CART', invId);},
       removeFromCart(context, index) { context.commit('REMOVE_FROM_CART', index); },
   },
