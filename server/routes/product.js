@@ -1,6 +1,7 @@
 const express = require('express');
 const { Product } = require('../models');
 const { Category } = require('../models');
+const { ProductCategory } = require('../models');
 
 const router = express.Router();
 
@@ -54,13 +55,29 @@ router.route('/:id')
     // get a specific product by id
     .get((req, res) => {
         Product.findById(req.params.id).then((product) => {
-            res.json(product);
+            ProductCategory.findAll({ where: { ProductId: req.params.id } }).then((categories) => {
+                const response = {
+                    product: product,
+                    categories: categories
+                }
+
+                res.json(response)
+            });
         });
     })
 
     .put((req, res) => {
-        const { Name, Price, Qty, Description, ImageLink } = req.body;
-        Product.findById(req.params.id).then(product => {
+        const idToUpdate = req.params.id;
+        const { Name, Price, Qty, Description, ImageLink, categoryList } = req.body;
+
+        // remove products tied to product
+        ProductCategory.findAll({ where: { ProductId: idToUpdate } }).then((categories) => {
+            for (var i = 0; i < categories.length; i++) {
+                categories[i].destroy();
+            }
+        });
+
+        Product.findById(idToUpdate).then(product => {
             const productToUpdate = product;
             productToUpdate.Name = Name;
             productToUpdate.Price = Price;
@@ -68,6 +85,16 @@ router.route('/:id')
             productToUpdate.Description = Description;
             productToUpdate.ImageLink = ImageLink;
             productToUpdate.save().then((updatedProduct) => {
+                // update the categories tied to product
+                for(var i = 0; i < categoryList.length; i++) {
+                    const category = categoryList[i];
+
+                    Category.findOne({ where: { Name: category } }).then((cat) => {
+                        productToUpdate.addCategory(cat);
+                        productToUpdate.save();
+                    });
+                }
+
                 res.json(updatedProduct);
             });
         });
@@ -76,6 +103,14 @@ router.route('/:id')
     // delete a specific product by id
     .delete((req, res) => {
         const idToDelete = req.params.id;
+
+        // remove all rows from inner table that are tied to Product to be removed
+        ProductCategory.findAll({ where: { ProductId: idToDelete } }).then((categories) => {
+            for (var i = 0; i < categories.length; i++) {
+                categories[i].destroy();
+            }
+        })
+
         Product.findById(idToDelete).then((product) => {
             product.destroy().then(() => {
                 res.json({ delete: true });
