@@ -21,10 +21,13 @@ describe('Navigate to Contact Form', function() {
       // error out if form isn't filled out
       cy.get('.btn')
       .click()
-      cy.contains('You must fill all fields!')
+      cy.get('#name_validation')
+      cy.get('#email_validation')
+      cy.get('#phone_validation')
+      cy.get('#message_validation')
    })
 
-   it('Should have the form', function() {
+   it('Should submit the form', function() {
       cy.get('#name')
       .type('Spaghetti Joe')
       cy.get('#email')
