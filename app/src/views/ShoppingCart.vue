@@ -13,17 +13,24 @@
           </div>
           <div class="modal-body">
             <table class="table">
+              <thead>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+              </thead>
               <tbody>
               <tr v-for="(item, index) in cart">
                 <td>{{ item.Name }}</td>
-                <td>{{ item.Price | dollars }}</td>
+                <td>x{{ item.Qty }}</td>
+                <td>${{ item.Price }}</td>
                 <td>
                   <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">&times;</button>
                 </td>
               </tr>
               <tr>
                 <th></th>
-                <th>{{ total | dollars }}</th>
+                <th></th>
+                <th>${{ total }}</th>
                 <th></th>
               </tr>
               </tbody>
@@ -31,7 +38,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-dismiss="modal">Keep shopping</button>
-            <button class="btn btn-primary">Check out</button>
+            <button class="btn btn-primary" data-dismiss="modal" v-on:click="goToCheckout">Check out</button>
           </div>
         </div>
       </div>
@@ -46,21 +53,68 @@
             inCart() { return this.$store.getters.inCart; },
             numInCart() { return this.inCart.length; },
             cart() {
-                return this.$store.getters.inCart.map((cartItem) => {
-                    return this.$store.getters.forSale.find((forSaleItem) => {
+                const bikes = JSON.parse(localStorage.getItem('bikes'));
+                const accessories = JSON.parse(localStorage.getItem('accessories'));
+
+                var products = [];
+                for (var i = 0; i < bikes.length; i++) {
+                    products.push(bikes[i]);
+                }
+
+                for(var j = 0; j < accessories.length; j++) {
+                    products.push(accessories[j]);
+                }
+
+                this.$store.dispatch('createProducts', products);
+
+                // get all the items in cart
+                const items = this.$store.getters.inCart.map((cartItem) => {
+                    return this.$store.getters.allProducts.find((forSaleItem) => {
                         return cartItem === forSaleItem.id;
                     });
                 });
+
+                // get quantity for selected item
+                const cart = Array();
+                for (var i = 0; i < items.length; i++) {
+                    const exists = false;
+                    for (var j = 0; j < cart.length; j++) {
+                        if (items[i].id === cart[j].id) {
+                            cart[j].Qty = cart[j].Qty + 1;
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (exists === false) {
+                        const product = {
+                            id: items[i].id,
+                            Name: items[i].Name,
+                            Price: items[i].Price,
+                            Qty: 1
+                        }
+                        cart.push(product);
+                    }
+                }
+
+                return cart;
             },
             total() {
-                return this.cart.reduce((acc, cur) => acc + cur.Price, 0);
+                return this.cart.reduce((acc, cur) => Math.round((acc + cur.Qty*cur.Price)*100) / 100, 0);
             },
         },
         filters: {
             dollars: num => `${num}`,
         },
         methods: {
-            removeFromCart(index) { this.$store.dispatch('removeFromCart', index); },
+            goToCheckout() {
+                this.$router.push('/checkout');
+            },
+            removeFromCart(index) {
+                this.$store.dispatch('removeFromCart', index);
+                const cart = this.$store.getters.inCart;
+                localStorage.setItem("cart", JSON.stringify(cart));
+            },
         },
     };
 </script>

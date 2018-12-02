@@ -44,6 +44,29 @@
         <br>
             <form class="form-container">
                 <h1>Review Order</h1>
+                <table class="table">
+                  <thead>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(item, index) in cart">
+                    <td>{{ item.Name }}</td>
+                    <td>x{{ item.Qty }}</td>
+                    <td>${{ item.Price }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">&times;</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th>${{ total }}</th>
+                    <th></th>
+                  </tr>
+                  </tbody>
+                </table>
                 <button type="submit" class="btn btn-success btn-block" v-on:click="order">Place Order</button>
             </form>
             <br>
@@ -77,11 +100,76 @@ import CreateOrderService from '@/services/CreateOrderService';
 
 export default {
     name: 'App',
+    data() {
+        return {
+            cart: [],
+        }
+    },
+    created: function() {
+        const cartIds = JSON.parse(localStorage.getItem("cart"));
+        this.$store.dispatch('setCart', cartIds);
+        const bikes = JSON.parse(localStorage.getItem('bikes'));
+        const accessories = JSON.parse(localStorage.getItem('accessories'));
+
+        var products = [];
+        for (var i = 0; i < bikes.length; i++) {
+            products.push(bikes[i]);
+        }
+
+        for(var j = 0; j < accessories.length; j++) {
+            products.push(accessories[j]);
+        }
+
+        this.$store.dispatch('createProducts', products);
+
+        // get all the cart items
+        const items = this.$store.getters.inCart.map((cartItem) => {
+            return this.$store.getters.allProducts.find((forSaleItem) => {
+                return cartItem === forSaleItem.id;
+            });
+        });
+
+        // get quantity for selected item
+        const cart = Array();
+        for (var i = 0; i < items.length; i++) {
+            const exists = false;
+            for (var j = 0; j < cart.length; j++) {
+                if (items[i].id === cart[j].id) {
+                    cart[j].Qty = cart[j].Qty + 1;
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (exists === false) {
+                const product = {
+                    id: items[i].id,
+                    Name: items[i].Name,
+                    Price: items[i].Price,
+                    Qty: 1
+                }
+                cart.push(product);
+            }
+        }
+
+        this.cart = cart;
+    },
+    computed: {
+        total() {
+            return this.cart.reduce((acc, cur) => Math.round((acc + cur.Qty*cur.Price)*100) / 100, 0);
+        }
+    },
     methods: {
       order (e) {
         e.preventDefault();
+        localStorage.removeItem("cart");
         this.$router.push('/ordercomplete')
-      }
+      },
+      removeFromCart(index) {
+          this.$store.dispatch('removeFromCart', index);
+          const cart = this.$store.getters.inCart;
+          localStorage.setItem("cart", JSON.stringify(cart));
+      },
     },
     components: {
       Navigation

@@ -34,11 +34,6 @@
 
     export default {
         name: 'bikes',
-        data () {
-            return {
-                items: [{id: 1, Name: "bike", ImageLink: "https://media.performancebike.com/images/performance/products/product-hi/31-7055-GRY-ANGLE.jpg?resize=1500px:1500px&output-quality=100", Price: 100, Description: "hello"}],
-            };
-        },
         created: async function(){
             const products = await GetBikesService.GetBikes().then(response => {
                 console.log(response.data);
@@ -46,10 +41,12 @@
             });
 
             this.$store.dispatch('addToForSale', products);
+            localStorage.setItem('bikes', JSON.stringify(products));
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            this.$store.dispatch('setCart', cart);
         },
         computed: {
-            forSale() { return this.$store.getters.forSale; },
-            inCart() { return this.$store.getters.inCart; },
+            forSale() { return this.$store.getters.forSale; }
         },
         components: {
             Item,
