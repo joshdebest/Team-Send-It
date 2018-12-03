@@ -1,5 +1,6 @@
 const express = require('express');
 const { Category } = require('../models');
+const { ProductCategory } = require('../models');
 
 const router = express.Router();
 
@@ -49,12 +50,20 @@ router.route('/:id')
 
     // delete a specific admin or employee by their id
     .delete((req, res) => {
-        const categoryId = req.params.id;
-        Category.findById(categoryId).then((category) => {
-            category.destroy().then(() => {
-                res.json({ delete: true });
+        const idToDelete = req.params.id;
+
+        // remove all rows from inner table that are tied to Category to be removed
+        ProductCategory.findAll({ where: { CategoryId: idToDelete } }).then((categories) => {
+            for (var i = 0; i < categories.length; i++) {
+                categories[i].destroy();
+            }
+
+            Category.findById(idToDelete).then((category) => {
+                category.destroy().then(() => {
+                    res.json({ delete: true });
+                });
             });
-        });
+        })
     })
 
 module.exports = router;

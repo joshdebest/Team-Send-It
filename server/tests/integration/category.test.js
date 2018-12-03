@@ -1,19 +1,19 @@
 const request = require('supertest');
 const app = require('../../app');
 const truncate = require('../truncate');
-const { BillingAddress } = require('../../models');
+const { Category } = require('../../models');
 
-const rootPath = '/billingaddresses';
+const rootPath = '/categories';
 const failPath = '/fail';
 
-describe('/billingaddresses', () => {
+describe('/adminusers', () => {
 
   beforeEach(() => {
     return truncate();
   });
 
   afterAll(() => {
-    return BillingAddress.sequelize.close();
+    return Category.sequelize.close();
   });
 
   describe('GET /', () => {
@@ -21,38 +21,28 @@ describe('/billingaddresses', () => {
       return request(app)
         .get(rootPath)
         .expect((response) => {
-          return expect(response.body.billingaddresses).toEqual([]);
+          return expect(response.body.categories).toEqual([]);
         });
     });
 
     it('should return 1 item in the array', () => {
-      return BillingAddress.create({
-        Street: 'test',
+      return Category.create({
+        Name: 'test',
       }).then(() => {
         return request(app).get(rootPath).expect((response) => {
-          return expect(response.body.billingaddresses.length).toEqual(1);
+          return expect(response.body.categories.length).toEqual(1);
         });
       });
     });
 
     it('should return an item with a specific id', () => {
-        return BillingAddress.create({
-            Street: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/'+item.id).expect((response) => {
-                return expect(response.body.Street).toEqual('test');
-            });
+      return Category.create({
+        Name: 'test',
+      }).then((item) => {
+        return request(app).get(rootPath+'/'+item.id).expect((response) => {
+          return expect(response.body.Name).toEqual('test');
         });
-    });
-
-    it('should return an item with a specific name', () => {
-        return BillingAddress.create({
-            Name: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/?name='+item.Name).expect((response) => {
-                return expect(response.body.billingaddresses.length).toEqual(1);
-            });
-        });
+      });
     });
 
     it('should return a 404 error', () => {
@@ -67,23 +57,41 @@ describe('/billingaddresses', () => {
       return request(app)
         .post(rootPath)
         .send({
-          Street: 'test',
+          Name: 'test',
         })
         .expect(200)
         .then((response) => {
-          return expect(response.body.Street).toEqual('test');
+          return expect(response.body.Name).toEqual('test');
         });
     });
   });
 
   describe('DELETE /', () => {
     it('should delete one contact form item', () => {
-        return BillingAddress.create({
-          Street: 'test',
+        return Category.create({
+          Name: 'test',
         }).then((item) => {
           return request(app).delete(rootPath + '/' + item.id).expect((response) => {
             return expect(response.body.delete).toEqual(true);
           });
+        });
+    });
+  });
+
+  describe('PUT /', () => {
+    it('should update one announcement item', () => {
+        return Category.create({
+            Name: 'test',
+        }).then((item) => {
+            return request(app)
+                .put(rootPath + '/' + item.id)
+                .send({
+                    Name: 'updatedtest',
+                })
+                .expect(200)
+                .then((response) => {
+                    return expect(response.body.Name).toEqual('updatedtest');
+                });
         });
     });
   });
