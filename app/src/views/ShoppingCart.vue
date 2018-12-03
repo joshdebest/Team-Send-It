@@ -47,6 +47,8 @@
 </template>
 
 <script>
+    import GetProductService from '@/services/GetProductService';
+
     export default {
         name: 'shoppingCart',
         computed: {
@@ -107,8 +109,25 @@
             dollars: num => `${num}`,
         },
         methods: {
-            goToCheckout() {
-                this.$router.push('/checkout');
+            async goToCheckout() {
+                var error = false;
+
+                // check to make sure quantities don't exceed stock
+                for (var i = 0; i < this.cart.length; i++) {
+                    const product = await GetProductService.GetProduct(this.cart[i].id).then((response) => {
+                        return response.data.product;
+                    });
+
+                    if (this.cart[i].Qty > product.Qty) {
+                        error = true;
+                        const difference = this.cart[i].Qty - product.Qty;
+                        alert("Out of Stock! Reduce " + this.cart[i].Name + " by " + difference + " before moving to checkout.");
+                    }
+                }
+
+                if (error === false) {
+                    this.$router.push('/checkout');
+                }
             },
             removeFromCart(index) {
                 this.$store.dispatch('removeFromCart', index);

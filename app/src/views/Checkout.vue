@@ -11,32 +11,31 @@
     <div class = "row">
         <div class = "col-md-6">
         <br>
-
             <form class="form-container">
                 <h2>Billing Information</h2>
                 <div class="form-group">
                     <label for="InputName">Name:</label>
-                    <input type="email" class="form-control" id="InputName" placeholder="Name">
+                    <input v-model="name" type="text" class="form-control" id="InputName" placeholder="Name" required>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Email:</label>
-                    <input type="email" class="form-control" id="InputEmail" placeholder="test@email.com">
+                    <input v-model="email" type="email" class="form-control" id="InputEmail" placeholder="test@email.com" required>
                 </div>
                 <div class="form-group">
                     <label for="InputAddress">Address:</label>
-                    <input type="address" class="form-control" id="InputAddress" placeholder="1234 Example Way">
+                    <input v-model="street" type="text" class="form-control" id="InputAddress" placeholder="1234 Example Way" required>
                 </div>
                 <div class="form-group">
                     <label for="InputCity">City:</label>
-                    <input type="email" class="form-control" id="InputEmail" placeholder="San Jose">
+                    <input v-model="city" type="text" class="form-control" id="InputEmail" placeholder="San Jose" required>
                 </div>
                 <div class="form-group">
                     <label for="InputState">State:</label>
-                    <input type="state" class="form-control" id="InputState" placeholder="CA">
+                    <input v-model="state" type="text" class="form-control" id="InputState" placeholder="CA" required>
                 </div>
                 <div class="form-group">
                     <label for="InputZipcode">ZIP code:</label>
-                    <input type="zipcode" class="form-control" id="InputZipcode" placeholder="12345">
+                    <input v-model="zipcode" type="text" class="form-control" id="InputZipcode" placeholder="12345" required>
                 </div>
             </form>
         </div>
@@ -74,19 +73,19 @@
                 <h2>Card Information</h2>
                 <div class="form-group">
                     <label for="InputCardNum">Card Number:</label>
-                    <input type="cardnum" class="form-control" id="InputCardNum" placeholder="XXXX XXXX XXXX XXXX">
+                    <input type="text" class="form-control" id="InputCardNum" placeholder="XXXX XXXX XXXX XXXX" required>
                 </div>
                 <div class="form-group">
                     <label for="InputSecurity">Security Code:</label>
-                    <input type="securitycode" class="form-control" id="InputSecurity" placeholder="XXX">
+                    <input type="text" class="form-control" id="InputSecurity" placeholder="XXX" requied>
                 </div>
                 <div class="form-group">
                     <label for="InputName">Name:</label>
-                    <input type="name" class="form-control" id="InputName" placeholder="Name">
+                    <input type="text" class="form-control" id="InputName" placeholder="Name" required>
                 </div>
                 <div class="form-group">
                     <label for="InputExpiration">Expiration:</label>
-                    <input type="Expiration" class="form-control" id="InputExpiration" placeholder="MM/YY">
+                    <input type="text" class="form-control" id="InputExpiration" placeholder="MM/YY" required>
                 </div>
             </form>
         </div>
@@ -97,11 +96,18 @@
 <script>
 import Navigation from './Navigation';
 import CreateOrderService from '@/services/CreateOrderService';
+import GetProductService from '@/services/GetProductService';
 
 export default {
     name: 'App',
     data() {
         return {
+            name: "",
+            email: "",
+            street: "",
+            city: "",
+            state: "",
+            zipcode: "",
             cart: [],
         }
     },
@@ -160,10 +166,52 @@ export default {
         }
     },
     methods: {
-      order (e) {
+      async order (e) {
         e.preventDefault();
-        localStorage.removeItem("cart");
-        this.$router.push('/ordercomplete')
+        var error = false;
+
+        // check to make sure quantities don't exceed stock
+        for (var i = 0; i < this.cart.length; i++) {
+            const product = await GetProductService.GetProduct(this.cart[i].id).then((response) => {
+                return response.data.product;
+            });
+
+            if (this.cart[i].Qty > product.Qty) {
+                error = true;
+                const difference = this.cart[i].Qty - product.Qty;
+                alert("Out of Stock! Reduce " + this.cart[i].Name + " by " + difference + " before moving to checkout.");
+            }
+        }
+
+        // check to make sure there are items to be checked out
+        if (this.cart.length === 0) {
+            error = true;
+            alert("Please add items to your cart before checking out.")
+        }
+
+        if (error === false) {
+            const order = {
+                CustomerName: this.name,
+                Email: this.email,
+                DateOrdered: new Date(),
+                TrackingNumber: Math.random().toString(36).substring(7),
+                OrderNumber: Math.random().toString(36).substring(7),
+                Status: "Pending",
+                Total: this.total,
+                Address: { street: this.street, city: this.city, state: this.state, zipcode: this.zipcode },
+                Products: this.cart
+            };
+
+            console.log(this.cart)
+
+            const placedOrder = await CreateOrderService.CreateOrder(order).then((response) => {
+                console.log(response.data);
+                return response.data;
+            });
+
+            localStorage.removeItem("cart");
+            this.$router.push('/ordercomplete');
+        }
       },
       removeFromCart(index) {
           this.$store.dispatch('removeFromCart', index);

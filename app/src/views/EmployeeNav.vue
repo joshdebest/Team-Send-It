@@ -21,7 +21,7 @@
                     <b-dropdown-item href="/pageinfo">Page Info</b-dropdown-item>
                     <b-dropdown-item href="/accounts">View Employees</b-dropdown-item>
                     <b-dropdown-item href="/accountinfo">Account Info</b-dropdown-item>
-                    <b-dropdown-item v-on:click="logout" href="/">Sign Out</b-dropdown-item>
+                    <b-dropdown-item v-on:click="logout">Sign Out</b-dropdown-item>
                 </b-nav-item-dropdown>
               </b-navbar-nav>
             </b-navbar-nav>
@@ -55,9 +55,15 @@ export default {
 
         this.$store.commit('logout');
         localStorage.removeItem("token");
+        this.$router.push('/');
       },
       async fetchUser () {
         const adminUserId = localStorage.getItem("token");
+
+        if (!adminUserId) {
+            alert("You are not authorized to enter this part of the site.")
+            this.$router.push('/');
+        }
 
         await GetUserService.GetUser(adminUserId).then(response => {
           this.user = response.data.Username

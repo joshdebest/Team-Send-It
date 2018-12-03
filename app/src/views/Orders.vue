@@ -4,11 +4,49 @@
   <h2 class="title">Order Management</h2>
 
   <div id="id01" class="modal">
-    <form class="modal-content" @submit="updateOrder">
+    <form class="modal-content" @submit.prevent="updateOrder">
       <div class="container">
         <h1>Order #{{ order.id }}</h1>
         <hr>
-
+        <label for="name"><b>Name</b></label>
+        <p>{{ order.name }}</p>
+        <label for="email"><b>Email</b></label>
+        <p>{{ order.email }}</p>
+        <label for="billingaddress"><b>Billing Address</b></label>
+        <p>{{ order.billingaddress.Street }},<br>{{ order.billingaddress.City }}, {{ order.billingaddress.State }}<br>{{ order.billingaddress.Zipcode }}</p>
+        <label for="date"><b>Date Ordered</b></label>
+        <p>{{ order.date }}</p>
+        <label for="date"><b>Tracking Number</b></label>
+        <p>{{ order.trackingNumber }}</p>
+        <label for="status"><b>Status</b></label><br>
+        <select class="status-option" v-model="order.status">
+            <option disabled value="">Please select one</option>
+            <option>Pending</option>
+            <option>Processed</option>
+            <option>Shipped</option>
+            <option>Completed</option>
+            <option>Canceled</option>
+        </select><br>
+        <label for="products"><b>Products Ordered</b></label>
+        <table class="table">
+          <thead>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+          </thead>
+          <tbody>
+          <tr class="products-table" v-for="item in order.products">
+            <td>{{ item.name }}</td>
+            <td>x{{ item.qty }}</td>
+            <td>${{ item.price }}</td>
+          </tr>
+          <tr class="products-table">
+            <th></th>
+            <th></th>
+            <th>${{ order.total }}</th>
+          </tr>
+          </tbody>
+        </table>
         <div class="clearfix">
           <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Close</button>
           <button type="submit" class="signupbtn">Update Status</button>
@@ -45,39 +83,116 @@ import EmployeeNav from './EmployeeNav';
 import GetOrderService from '@/services/GetOrderService';
 import GetOrdersService from '@/services/GetOrdersService';
 import UpdateOrderService from '@/services/UpdateOrderService';
+import GetBillingAddressService from '@/services/GetBillingAddressService';
+import GetProductService from '@/services/GetProductService';
+import UpdateProductService from '@/services/UpdateProductService';
 
 export default {
   name: 'App',
   data () {
     return {
-      order: {id: 1, name: "John", email: "john@gmail.com", datePurchased: "date", status: "delivered", total: 299.99, products: ["wheels", "bike", "helmet"]},
-      rows: [{id: 1, name: "John", billTo: {street: "123 test ave", city: "san luis obispo", state: "ca", zipcode: "93401"}, total: 299.99, date: "yesterday", status: "delivered"}]
+      order: {id: 1, name: "John", email: "john@gmail.com", date: "11/28/18", status: "delivered", total: 299.99,
+            products: [{name: "wheel", qty: 3, price: 10.99}, {name: "bike", qty: 1, price: 179.99}, {name: "helmet", qty: 5, price: 30.99}],
+            billingaddress: {Street: "123 test ave", City: "san luis obispo", State: "ca", Zipcode: "93401"}, trackingNumber: 'a3dfec'},
+      rows: [{id: 1, name: "John", billTo: {street: "123 test ave", city: "san luis obispo", state: "ca", zipcode: "93401"}, total: 299.99, date: "yesterday", status: "delivered"}],
+      currentStatus: "",
     };
   },
   created: async function() {
+      // get orders to be displayed in table
+      const orders = await GetOrdersService.GetOrders().then((response) => {
+        console.log(response.data.orders);
+        return response.data.orders;
+      });
 
+      this.rows = [];
+      // get each orders associated billing address
+      for (var i = 0; i < orders.length; i++) {
+        const billingaddress = await GetBillingAddressService.GetBillingAddress(orders[i].id).then((response) => {
+          return response.data;
+        })
+
+        const order = {
+          id: orders[i].id,
+          name: orders[i].CustomerName,
+          billTo: {
+            street: billingaddress.Street,
+            city: billingaddress.City,
+            state: billingaddress.State,
+            zipcode: billingaddress.Zipcode
+          },
+          total: orders[i].Total,
+          date: orders[i].DateOrdered.substring(0, 10),
+          status: orders[i].Status
+        }
+
+        this.rows.push(order);
+      }
   },
   methods: {
-    getOrder(orderId) {
+    async getOrder(orderId) {
       document.getElementById('id01').style.display='block';
 
-      const ord = GetOrderService.GetOrder(orderId).then((response) => {
+      const ord = await GetOrderService.GetOrder(orderId).then((response) => {
         console.log(response.data);
         return response.data;
       });
 
+      const products = [];
+      for (var i = 0; i < ord.productorders.length; i++) {
+        const prod = await GetProductService.GetProduct(ord.productorders[i].ProductId).then((response) => {
+            return response.data.product;
+        })
+
+        const product = {
+            id: prod.id,
+            name: prod.Name,
+            qty: ord.productorders[i].Qty,
+            price: prod.Price
+        }
+        products.push(product);
+      }
+
       this.order.id = ord.order.id;
       this.order.name = ord.order.CustomerName;
       this.order.email = ord.order.Email;
-      this.order.date = ord.order.DateOrdered;
+      this.order.date = ord.order.DateOrdered.substring(0,10);
+      this.order.trackingNumber = ord.order.TrackingNumber;
       this.order.status = ord.order.Status;
       this.order.total = ord.order.Total;
+      this.order.products = products;
+      this.order.billingaddress = ord.billingaddress;
+      this.currentStatus = ord.order.Status;
+    },
+    async updateOrder() {
+        const id = this.order.id;
+        const status = this.order.status;
 
-      this.order.products = Array();
+        if (this.currentStatus === "Canceled") {
+            alert("Can't update order status since it has been canceled.");
+        }
+        else {
+            await UpdateOrderService.UpdateOrderStatus(id, { Status: status }).then((response) => {
+                console.log(response.data);
 
-      for (var i = 0; i < ord.products.length; i++) {
-        // not exactly going to work
-      }
+                // if order is canceled add products back to stock
+                if (response.data.Status === "Canceled") {
+                    for (var i = 0; i < this.order.products.length; i++) {
+                        const prodId = this.order.products[i].id;
+                        const Quantity = {
+                            Quantity: this.order.products[i].qty
+                        }
+
+                        UpdateProductService.UpdateProductQty(prodId, Quantity).then((response) => {
+                            console.log(response.data);
+                        });
+                    }
+                }
+            });
+
+            document.getElementById('id01').style.display='none';
+            location.reload();
+        }
     },
   },
   components: {
@@ -208,5 +323,11 @@ td {
 
 tr:nth-child(even) {
     background-color: #f2f2f2
+}
+.products-table > * {
+    background-color: white
+}
+.status-option {
+    margin-bottom: 15px;
 }
 </style>
