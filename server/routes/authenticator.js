@@ -10,8 +10,9 @@ const Auth = {
             foundSession = Session.build();
           }
           foundSession.Expiration = new Date(new Date().getTime() + 30 * 60000);
-          foundSession.save().then(updatedSession => adminuser.setSession(updatedSession));
-          return foundSession;
+          return foundSession.save().then(updatedSession => adminuser.setSession(updatedSession).then((sess) => {
+              return foundSession;
+          }));
       });
       }
       return Promise.reject(new Error('Incorrect Email or Password'));
