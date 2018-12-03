@@ -39,7 +39,7 @@
 
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->
       <b-carousel-slide img-src="https://k4kis3b14e9g4w8e-zippykid.netdna-ssl.com/wp-content/uploads/2017/12/buying-used-head-1024x480.jpg">
-        <h1>Start Biking Now</h1>
+        <h1>Start Biking Now!</h1>
       </b-carousel-slide>
     </b-carousel>
 

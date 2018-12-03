@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang="scss">
-.hero{background: url('http://www.achieve3000.com/wp-content/uploads/2015/02/contact-us-hero.jpg') no-repeat;
+.hero{background: url('https://i1.wp.com/paulnrogers.com/wp-content/uploads/2017/09/Magento-2-Checkout.jpg?fit=1728%2C969&ssl=1') no-repeat;
   max-width: 100%;
   max-height: 100vh;
   background-size: 1300px 900px;
