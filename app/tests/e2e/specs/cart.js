@@ -1,9 +1,65 @@
-describe('', function() {
+describe('Cart should be interactable', function() {
    beforeEach(function () {
-      cy.visit('http://localhost:8080/')
-      cy.contains('')
+      cy.visit('http://localhost:8080/bikes')
    })
 
-   it('', function() {
+   it('Should add an item when "add to cart"', function() {
+      cy.get(':nth-child(1) > .card > .card-body > .row > .btn')
+	   .click()
+      cy.get('[data-toggle="modal"]')
+	   .contains('Cart (1)')
+   })
+
+   it('Should bring up an empty cart when "cart"', function() {
+      cy.get('[data-toggle="modal"]')
+	   .click()
+      cy.get('tr > :nth-child(2)')
+	   .contains('0')
+      cy.get('.close')
+	   .click()
+   })
+  
+   it('Should bring up an item in cart when "cart"', function() {
+      cy.get(':nth-child(1) > .card > .card-body > .row > .btn')
+	   .click()
+      cy.get('[data-toggle="modal"]')
+	   .click()
+      cy.get('tbody > :nth-child(1) > :nth-child(1)')
+	   .contains('An Item')
+      cy.get('tbody > :nth-child(2) > :nth-child(2)')
+	   .contains('9.99')
+      cy.get('.close')
+	   .click()
+   })
+
+   it('Should remove an item from cart when "x"', function() {
+      cy.get(':nth-child(1) > .card > .card-body > .row > .btn')
+	   .click()
+      cy.get('[data-toggle="modal"]')
+	   .click()
+      cy.get('tbody > :nth-child(1) > :nth-child(1)')
+	   .contains('An Item')
+      cy.get('tbody > :nth-child(2) > :nth-child(2)')
+	   .contains('9.99')
+      cy.get('tbody > :nth-child(1) > :nth-child(3) > .btn')
+	   .click()
+      cy.get('tr > :nth-child(2)')
+	   .contains('0')
+      cy.get('.close')
+	   .click()
+   })
+
+   it('Should redirect to cart when "Check Out"', function() {
+      cy.get(':nth-child(1) > .card > .card-body > .row > .btn')
+	   .click()
+      cy.get('[data-toggle="modal"]')
+	   .click()
+      cy.get('tbody > :nth-child(1) > :nth-child(1)')
+	   .contains('An Item')
+      cy.get('tbody > :nth-child(2) > :nth-child(2)')
+	   .contains('9.99')
+      cy.get('.modal-footer > .btn-primary')
+      	   .click()
+      cy.url().should('include', '/checkout')
    })
 })
