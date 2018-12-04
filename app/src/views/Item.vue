@@ -21,6 +21,8 @@
         methods: {
             addToCart(id) {
                 this.$store.dispatch('addToCart', id);
+                const cart = this.$store.getters.inCart;
+                localStorage.setItem("cart", JSON.stringify(cart));
             },
         },
         filters: {
@@ -36,5 +38,10 @@
 }
 .card {
     height: 750px;
+    margin-bottom: 30px;
+}
+.add-cart {
+    position: absolute;
+    bottom: 20px;
 }
 </style>

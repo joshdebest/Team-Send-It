@@ -1,24 +1,33 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('BillingAddresses', {
+    return queryInterface.createTable('Orders', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Street: {
+      CustomerName: {
         type: Sequelize.STRING
       },
-      City: {
+      Email: {
         type: Sequelize.STRING
       },
-      State: {
+      DateOrdered: {
+        type: Sequelize.DATE
+      },
+      TrackingNumber: {
         type: Sequelize.STRING
       },
-      Zipcode: {
+      OrderNumber: {
         type: Sequelize.STRING
+      },
+      Status: {
+        type: Sequelize.STRING
+      },
+      Total: {
+        type: Sequelize.FLOAT
       },
       createdAt: {
         allowNull: false,
@@ -27,18 +36,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      OrderId: {
-        type: Sequelize.INTEGER,
-        unique: true,
-        references: {
-          model: 'Orders',
-          key: 'id'
-        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('BillingAddresses');
+    return queryInterface.dropTable('Orders');
   }
 };

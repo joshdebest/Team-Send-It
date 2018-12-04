@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     Email: DataTypes.STRING,
     DateOrdered: DataTypes.DATE,
     TrackingNumber: DataTypes.STRING,
-    OrderNumber: DataTypes.INTEGER,
+    OrderNumber: DataTypes.STRING,
     Status: DataTypes.STRING,
     Total: DataTypes.FLOAT
   }, {});
