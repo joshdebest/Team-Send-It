@@ -54,6 +54,7 @@
 
 <script>
 import EmployeeNav from './EmployeeNav';
+import GetUserService from '@/services/GetUserService';
 import GetUsersService from '@/services/GetUsersService';
 import CreateUserService from '@/services/CreateUserService';
 import RemoveUserService from '@/services/RemoveUserService';
@@ -72,6 +73,17 @@ export default {
     };
   },
   created: async function(){
+    const adminUserId = localStorage.getItem("token");
+    const user = await GetUserService.GetUser(adminUserId).then(response => {
+        console.log(response.data);
+        return response.data;
+    });
+
+    if (user.Admin === false) {
+        alert("Please sign into an admin account to have access to this page.");
+        this.$router.push('/employee');
+    }
+
     const adminusers = await GetUsersService.GetUsers().then(users => {
       console.log(users.data.adminusers);
       return users.data.adminusers;

@@ -17,6 +17,20 @@ module.exports = {
       Date: {
         type: Sequelize.DATE
       },
+      OrderId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Orders',
+            key: 'id'
+        }
+      },
+      ProductId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Products',
+            key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -24,20 +38,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      OrderId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Orders',
-          key: 'id'
-        }
-      },
-      ProductId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Products',
-          key: 'id'
-        }
       }
     });
   },
