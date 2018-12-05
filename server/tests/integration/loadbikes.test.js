@@ -1,8 +1,9 @@
 const request = require('supertest');
 const app = require('../../app');
 const truncate = require('../truncate');
-const { Category } = require('../../models');
 const { Product } = require('../../models');
+const { Category } = require('../../models');
+const { ProductCategory } = require('../../models');
 
 const rootPath = '/loadbikes';
 const failPath = '/fail';
@@ -10,28 +11,38 @@ const failPath = '/fail';
 describe('/loadbikes', () => {
 
   beforeEach(() => {
-    return truncate();
+    return ProductCategory.destroy({
+      where: {},
+      force: true
+    }).then(() => {
+      return truncate();
+    });
   });
 
   afterAll(() => {
-    return Category.sequelize.close().then(() => {
-        return Product.sequelize.close();
+    return ProductCategory.sequelize.close().then(() => {
+        return Product.sequelize.close().then(() => {
+            return Category.sequelize.close();
+        });
     });
   });
 
   describe('GET /', () => {
-    it('should return an empty array', () => {
-      return request(app)
-        .get(rootPath)
-        .expect(404);
-    });
-
-    it('should return 1 item in the array', () => {
+    it('should return products that are associated with the Bikes category', () => {
       return Category.create({
-        Name: 'Bikes',
-      }).then(() => {
-        return request(app).get(rootPath).expect((response) => {
-          return expect(response.body.products).toEqual([]);
+        Name: 'Bikes'
+      }).then((category) => {
+        return Product.create({
+          Name: 'product'
+        }).then((product) => {
+          return ProductCategory.create({
+            ProductId: product.id,
+            CategoryId: category.id
+          }).then(() => {
+            return request(app).get(rootPath).expect((response) => {
+              return expect(response.body.length).toEqual(1);
+            });
+          });
         });
       });
     });
