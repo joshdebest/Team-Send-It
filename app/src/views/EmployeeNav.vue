@@ -5,7 +5,7 @@
 
           <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-          <b-navbar-brand href="/">
+          <b-navbar-brand>
             <img src="https://d3ciwvs59ifrt8.cloudfront.net/104351d8-d394-4a78-8966-d02d8dcb8a94/ae6d7eda-04b2-4c74-851a-e7a3ac7798bf_m.png" class="d-inline-block align-top" style="width:55px;height:55px;">
           </b-navbar-brand>
             Foxycle
