@@ -1,9 +1,43 @@
-describe('', function() {
+describe('Order management should be usable', function() {
    beforeEach(function () {
-      cy.visit('http://localhost:8080/')
-      cy.contains('')
+      cy.visit('http://localhost:8080/login')
+      cy.contains('Login')
+		cy.get('#exampleInputEmail1')
+			.type('admin@gmail.com')
+		cy.get('#exampleInputPassword1')
+			.type('admin')
+		cy.get('.btn')
+			.click()
+		cy.wait(1000)
+		cy.visit('http://localhost:8080/orders')
    })
 
-   it('', function() {
+   it('Should have orders', function() {
+		cy.contains('Order Management')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(1)')
+			.contains('1')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(2)')
+			.contains('John')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(3)')
+			.contains('123')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(4)')
+			.contains('$299.99')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(5)')
+			.contains('yesterday')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(6)')
+			.contains('delivered')
+   })
+
+   it('Should allow order updates', function() {
+		cy.contains('Order Management')
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(1)')
+			.click()
+		cy.get('.status-option')
+			.select('Completed')
+		cy.get('.signupbtn')
+			.click()
+		cy.get('.employee-table > table > :nth-child(2) > :nth-child(6)')
+			.contains('Completed')
+		
    })
 })
