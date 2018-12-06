@@ -4,6 +4,10 @@ describe('Accessories should be present and interactable', function() {
       cy.contains('Accessories')
    })
 
-   it('', function() {
+   it('Should have accessories', function() {
+      cy.contains('Continental Gatorskin Folding Road Tire')
+   })
+	
+   it('Should have filters', function() {
    })
 })

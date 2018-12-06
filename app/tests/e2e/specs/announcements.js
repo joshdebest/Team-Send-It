@@ -1,9 +1,37 @@
-describe('', function() {
+describe('Announcements should be visible', function() {
    beforeEach(function () {
       cy.visit('http://localhost:8080/')
-      cy.contains('')
+      cy.contains('Announcements')
    })
 
-   it('', function() {
+   it('Should have the announcements listed', function() {
+		cy.contains('Cannondale Synapse NEO gets the all-road e-bike treatment, or SE for quick gravel')
    })
+
+	it('Should allow creation of announcements', function() {
+		cy.visit('http://localhost:8080/login')
+      cy.contains('Login')
+      cy.get('#exampleInputEmail1')
+        .type('admin@gmail.com')
+      cy.get('#exampleInputPassword1')
+         .type('admin')
+      cy.get('.btn')
+         .click()
+      cy.wait(1000)
+      cy.visit('http://localhost:8080/pageinfo')
+		cy.contains('Create Announcement')
+			.click()
+		cy.wait(1000)
+		cy.get('#id01 > .modal-content > .container > input')
+			.type('A test announcement')
+		cy.get('#id01 > .modal-content > .container > #message')
+			.type('dootdoot')
+		cy.get('#id01 > .modal-content > .container > .clearfix > .signupbtn')
+			.click()
+		cy.contains('A test announcement')
+			.parent()
+			.children()
+			.contains('Remove')
+			.click()
+	})
 })
