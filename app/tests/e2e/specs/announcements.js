@@ -35,3 +35,27 @@ describe('Announcements should be visible', function() {
 			.click()
 	})
 })
+
+describe('Announcements reflect changes in manager', function() {
+	it('Should display added announcement in announcements', function () {
+		cy.request("POST", "http://localhost:3000/announcements", {"Title": "spaghettios available", "Message": "dO u HaVe SpAgHeTtIoS"})
+		cy.visit('http://localhost:8080/')
+		cy.contains('spaghettios available')
+      cy.visit('http://localhost:8080/login')
+      cy.contains('Login')
+      cy.get('#exampleInputEmail1')
+        .type('admin@gmail.com')
+      cy.get('#exampleInputPassword1')
+         .type('admin')
+      cy.get('.btn')
+         .click()
+      cy.wait(1000)
+      cy.visit('http://localhost:8080/pageinfo')
+		cy.contains('spaghettios available')
+			.parent()
+			.children()
+			.contains('Remove')
+			.click()
+	})
+})
+
