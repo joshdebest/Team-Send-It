@@ -2,18 +2,37 @@ const request = require('supertest');
 const app = require('../../app');
 const truncate = require('../truncate');
 const { Order } = require('../../models');
+const { BillingAddress } = require('../../models');
+const { Product } = require('../../models');
+const { ProductOrder } = require('../../models');
 
-const rootPath = '/orders';
+const rootPath = '/order';
 const failPath = '/fail';
 
-describe('/orders', () => {
+describe('/order', () => {
 
   beforeEach(() => {
-    return truncate();
+    return BillingAddress.destroy({
+      where: {},
+      force: true,
+    }).then(() => {
+      return ProductOrder.destroy({
+        where: {},
+        force: true,
+      }).then(() => {
+        return truncate();
+      });
+    });
   });
 
   afterAll(() => {
-    return Order.sequelize.close();
+    return ProductOrder.sequelize.close().then(() => {
+        return BillingAddress.sequelize.close().then(() => {
+            return Product.sequelize.close().then(() => {
+                return Order.sequelize.close();
+            });
+        });
+    });
   });
 
   describe('GET /', () => {
@@ -25,7 +44,7 @@ describe('/orders', () => {
         });
     });
 
-    it('should return 1 item in the array', () => {
+    it('should return 1 order in the array', () => {
       return Order.create({
         CustomerName: 'test',
       }).then(() => {
@@ -35,26 +54,6 @@ describe('/orders', () => {
       });
     });
 
-    it('should return an item with a specific id', () => {
-        return Order.create({
-            CustomerName: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/'+item.id).expect((response) => {
-                return expect(response.body.CustomerName).toEqual('test');
-            });
-        });
-    });
-
-    it('should return an item with a specific name', () => {
-        return Order.create({
-            CustomerName: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/?name='+item.CustomerName).expect((response) => {
-                return expect(response.body.orders.length).toEqual(1);
-            });
-        });
-    });
-
     it('should return a 404 error', () => {
         return request(app)
             .get(failPath)
@@ -62,12 +61,41 @@ describe('/orders', () => {
     });
   });
 
+  describe('GET /id', () => {
+      it('should return an order with a specific id', () => {
+          return Order.create({
+              CustomerName: 'test',
+          }).then((order) => {
+              return BillingAddress.create({
+                  Street: 'test',
+                  OrderId: order.id
+              }).then((billingaddress) => {
+                  return Product.create({
+                      Name: 'product',
+                      Qty: billingaddress.OrderId
+                  }).then((product) => {
+                      return ProductOrder.create({
+                          OrderId: product.Qty,
+                          ProductId: product.id
+                      }).then((prodord) => {
+                          return request(app).get(rootPath+'/'+prodord.OrderId).expect((response) => {
+                              return expect(response.body.order.CustomerName).toEqual('test');
+                          });
+                      })
+                  })
+              })
+          });
+      });
+  });
+
   describe('POST /', () => {
-    it('should create one contact form item', () => {
+    it('should create an order', () => {
       return request(app)
         .post(rootPath)
         .send({
           CustomerName: 'test',
+          Address: { street: 'test', city: 'ave', state: 'CA', zipcode: '93401' },
+          Products: []
         })
         .expect(200)
         .then((response) => {
@@ -76,14 +104,20 @@ describe('/orders', () => {
     });
   });
 
-  describe('DELETE /', () => {
-    it('should delete one contact form item', () => {
+  describe('PUT /', () => {
+    it('should update the status of an order', () => {
         return Order.create({
-          CustomerName: 'test',
-        }).then((item) => {
-          return request(app).delete(rootPath + '/' + item.id).expect((response) => {
-            return expect(response.body.delete).toEqual(true);
-          });
+          Status: 'Pending',
+        }).then((order) => {
+          return request(app)
+              .put(rootPath + '/' + order.id)
+              .send({
+                Status: 'Completed'
+              })
+              .expect(200)
+              .then((response) => {
+                  return expect(response.body.Status).toEqual('Completed');
+              });
         });
     });
   });

@@ -25,7 +25,7 @@ describe('/adminusers', () => {
         });
     });
 
-    it('should return 1 item in the array', () => {
+    it('should return 1 category in the array', () => {
       return Category.create({
         Name: 'test',
       }).then(() => {
@@ -35,7 +35,7 @@ describe('/adminusers', () => {
       });
     });
 
-    it('should return an item with a specific id', () => {
+    it('should return a category with a specific id', () => {
       return Category.create({
         Name: 'test',
       }).then((item) => {
@@ -53,7 +53,7 @@ describe('/adminusers', () => {
   });
 
   describe('POST /', () => {
-    it('should create one contact form item', () => {
+    it('should create one category', () => {
       return request(app)
         .post(rootPath)
         .send({
@@ -67,7 +67,7 @@ describe('/adminusers', () => {
   });
 
   describe('DELETE /', () => {
-    it('should delete one contact form item', () => {
+    it('should delete one category', () => {
         return Category.create({
           Name: 'test',
         }).then((item) => {
@@ -79,7 +79,7 @@ describe('/adminusers', () => {
   });
 
   describe('PUT /', () => {
-    it('should update one announcement item', () => {
+    it('should update one category', () => {
         return Category.create({
             Name: 'test',
         }).then((item) => {
