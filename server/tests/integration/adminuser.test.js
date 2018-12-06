@@ -63,7 +63,7 @@ describe('/adminusers', () => {
   });
 
   describe('POST /', () => {
-    it('should create one contact form item', () => {
+    it('should create one adminuser', () => {
       return request(app)
         .post(rootPath)
         .send({
@@ -77,7 +77,7 @@ describe('/adminusers', () => {
   });
 
   describe('DELETE /', () => {
-    it('should delete one contact form item', () => {
+    it('should delete one adminuser', () => {
         return AdminUser.create({
           Name: 'test',
         }).then((item) => {
@@ -89,7 +89,7 @@ describe('/adminusers', () => {
   });
 
   describe('PUT /', () => {
-    it('should update one announcement item', () => {
+    it('should update one adminuser', () => {
         return AdminUser.create({
             Name: 'test',
         }).then((item) => {
