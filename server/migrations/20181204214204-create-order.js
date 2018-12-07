@@ -21,7 +21,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       OrderNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
+      },
+      Status: {
+        type: Sequelize.STRING
       },
       Total: {
         type: Sequelize.FLOAT

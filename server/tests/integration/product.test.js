@@ -2,14 +2,21 @@ const request = require('supertest');
 const app = require('../../app');
 const truncate = require('../truncate');
 const { Product } = require('../../models');
+const { Category } = require('../../models');
+const { ProductCategory } = require('../../models');
 
-const rootPath = '/products';
+const rootPath = '/product';
 const failPath = '/fail';
 
-describe('/products', () => {
+describe('/product', () => {
 
   beforeEach(() => {
-    return truncate();
+    return ProductCategory.destroy({
+      where: {},
+      force: true
+    }).then(() => {
+      return truncate();
+    });
   });
 
   afterAll(() => {
@@ -25,7 +32,7 @@ describe('/products', () => {
         });
     });
 
-    it('should return 1 item in the array', () => {
+    it('should return 1 product in the array', () => {
       return Product.create({
         Name: 'test',
       }).then(() => {
@@ -35,22 +42,12 @@ describe('/products', () => {
       });
     });
 
-    it('should return an item with a specific id', () => {
+    it('should return a product with a specific id', () => {
         return Product.create({
             Name: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/'+item.id).expect((response) => {
-                return expect(response.body.Name).toEqual('test');
-            });
-        });
-    });
-
-    it('should return an item with a specific name', () => {
-        return Product.create({
-            Name: 'test',
-        }).then((item) => {
-            return request(app).get(rootPath+'/?name='+item.Name).expect((response) => {
-                return expect(response.body.orders.length).toEqual(1);
+        }).then((product) => {
+            return request(app).get(rootPath+'/'+product.id).expect((response) => {
+                return expect(response.body.product.Name).toEqual('test');
             });
         });
     });
@@ -63,28 +60,72 @@ describe('/products', () => {
   });
 
   describe('POST /', () => {
-    it('should create one contact form item', () => {
+    it('should create a product', () => {
+      return Category.create({
+        Name: 'Bikes'
+      }).then((category) => {
       return request(app)
         .post(rootPath)
         .send({
-          CustomerName: 'test',
+          Name: 'test',
+          categoryList: []
         })
         .expect(200)
         .then((response) => {
-          return expect(response.body.CustomerName).toEqual('test');
+          return expect(response.body.Name).toEqual('test');
         });
+      });
+    });
+  });
+
+  describe('PUT /', () => {
+    it('should update a product', () => {
+      return Category.create({
+        Name: 'category'
+      }).then((category) => {
+        return Product.create({
+          Name: 'test',
+          Qty: category.id
+        }).then((product) => {
+          return ProductCategory.create({
+            ProductId: product.id,
+            CategoryId: category.id
+          }).then((prodcat) => {
+            return request(app)
+              .put(rootPath+'/'+prodcat.ProductId)
+              .send({
+                Name: 'updatedTest',
+                categoryList: []
+              })
+              .expect(200)
+              .then((response) => {
+                return expect(response.body.Name).toEqual('updatedTest');
+              });
+          });
+        });
+      });
     });
   });
 
   describe('DELETE /', () => {
-    it('should delete one contact form item', () => {
-        return Order.create({
-          CustomerName: 'test',
-        }).then((item) => {
-          return request(app).delete(rootPath + '/' + item.id).expect((response) => {
-            return expect(response.body.delete).toEqual(true);
+    it('should delete one product', () => {
+      return Category.create({
+        Name: 'category',
+      }).then((category) => {
+        return Product.create({
+          Name: 'product',
+          Qty: category.id
+        }).then((product) => {
+          return ProductCategory.create({
+            ProductId: product.id,
+            CategoryId: category.id
+          }).then((prodcat) => {
+            return request(app).delete(rootPath+'/'+prodcat.ProductId).expect((response) => {
+              return expect(response.body.delete).toEqual(true);
+            });
           });
         });
+      });
     });
   });
 });

@@ -1,9 +1,9 @@
 const request = require('supertest');
 const app = require('../../app');
 const truncate = require('../truncate');
-const { AdminUser } = require('../../models');
+const { Category } = require('../../models');
 
-const rootPath = '/adminusers';
+const rootPath = '/categories';
 const failPath = '/fail';
 
 describe('/adminusers', () => {
@@ -13,7 +13,7 @@ describe('/adminusers', () => {
   });
 
   afterAll(() => {
-    return AdminUser.sequelize.close();
+    return Category.sequelize.close();
   });
 
   describe('GET /', () => {
@@ -21,38 +21,28 @@ describe('/adminusers', () => {
       return request(app)
         .get(rootPath)
         .expect((response) => {
-          return expect(response.body.adminusers).toEqual([]);
+          return expect(response.body.categories).toEqual([]);
         });
     });
 
-    it('should return 1 item in the array', () => {
-      return AdminUser.create({
+    it('should return 1 category in the array', () => {
+      return Category.create({
         Name: 'test',
       }).then(() => {
         return request(app).get(rootPath).expect((response) => {
-          return expect(response.body.adminusers.length).toEqual(1);
+          return expect(response.body.categories.length).toEqual(1);
         });
       });
     });
 
-    it('should return an item with a specific id', () => {
-      return AdminUser.create({
+    it('should return a category with a specific id', () => {
+      return Category.create({
         Name: 'test',
       }).then((item) => {
         return request(app).get(rootPath+'/'+item.id).expect((response) => {
           return expect(response.body.Name).toEqual('test');
         });
       });
-    });
-
-    it('should return an item that is an admin', () => {
-        return AdminUser.create({
-            Admin: true,
-        }).then((item) => {
-            return request(app).get(rootPath+'/?Admin='+item.Admin).expect((response) => {
-                return expect(response.body.adminusers.length).toEqual(1);
-            });
-        });
     });
 
     it('should return a 404 error', () => {
@@ -63,7 +53,7 @@ describe('/adminusers', () => {
   });
 
   describe('POST /', () => {
-    it('should create one adminuser', () => {
+    it('should create one category', () => {
       return request(app)
         .post(rootPath)
         .send({
@@ -77,8 +67,8 @@ describe('/adminusers', () => {
   });
 
   describe('DELETE /', () => {
-    it('should delete one adminuser', () => {
-        return AdminUser.create({
+    it('should delete one category', () => {
+        return Category.create({
           Name: 'test',
         }).then((item) => {
           return request(app).delete(rootPath + '/' + item.id).expect((response) => {
@@ -89,8 +79,8 @@ describe('/adminusers', () => {
   });
 
   describe('PUT /', () => {
-    it('should update one adminuser', () => {
-        return AdminUser.create({
+    it('should update one category', () => {
+        return Category.create({
             Name: 'test',
         }).then((item) => {
             return request(app)

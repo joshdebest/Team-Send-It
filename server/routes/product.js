@@ -108,13 +108,13 @@ router.route('/:id')
             for (var i = 0; i < categories.length; i++) {
                 categories[i].destroy();
             }
-        })
 
-        Product.findById(idToDelete).then((product) => {
-            product.destroy().then(() => {
-                res.json({ delete: true });
+            Product.findById(idToDelete).then((product) => {
+                product.destroy().then(() => {
+                    res.json({ delete: true });
+                });
             });
-        });
+        })
     })
 
 module.exports = router;

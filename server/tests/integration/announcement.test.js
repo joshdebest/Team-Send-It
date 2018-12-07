@@ -25,7 +25,7 @@ describe('/announcements', () => {
         });
     });
 
-    it('should return 1 item in the array', () => {
+    it('should return 1 announcement in the array', () => {
       return Announcement.create({
         Title: 'test',
       }).then(() => {
@@ -35,7 +35,7 @@ describe('/announcements', () => {
       });
     });
 
-    it('should return an item with a specific id', () => {
+    it('should return an announcement with a specific id', () => {
         return Announcement.create({
             Title: 'test',
         }).then((item) => {

@@ -10,17 +10,8 @@ router.route('/')
     // get all orders
     .get((req, res) => {
         Order.findAll().then((orders) => {
-            // get the billing address of each order
-            var billingaddresses = Array();
-            for (var i = 0; i < orders.length; i++) {
-                orders[i].getBillingAddress().then(billingaddress => {
-                    billingaddresses.push(billingaddress);
-                })
-            }
-
             res.json({
-                orders: orders,
-                billingaddresses: billingaddresses
+                orders,
             });
         });
     })
@@ -36,8 +27,7 @@ router.route('/')
             Status,
             Total,
             Address,
-            productIdList,
-            quantityList
+            Products
         } = req.body;
 
         const newOrder = Order.build({
@@ -60,17 +50,29 @@ router.route('/')
             }).then(billingaddress => {
                 newOrder.setBillingAddress(billingaddress);
                 newOrder.save();
-            })
 
-            // add all the products to the order
-            for (var i = 0; i < productIdList.length; i++) {
-                const idToAdd = productIdList[i];
+                // add all the products to the order
+                for (var i = 0; i < Products.length; i++) {
+                    const id = Products[i].id;
+                    const price = Math.round((Products[i].Price * Products[i].Qty)*100) / 100;
+                    const quantity = Products[i].Qty;
 
-                Product.findById(idToAdd).then((product) => {
-                    newOrder.addProduct(product);
+                    newOrder.createProductOrder({
+                        Price: price,
+                        Qty: quantity,
+                        Date: DateOrdered,
+                        ProductId: id
+                    });
                     newOrder.save();
-                });
-            }
+
+                    // update stock of product
+                    Product.findById(id).then((product) => {
+                        const productToUpdate = product;
+                        productToUpdate.Qty = productToUpdate.Qty - quantity;
+                        productToUpdate.save();
+                    });
+                }
+            });
 
             res.json(newOrder);
         })
@@ -84,25 +86,11 @@ router.route('/:id')
             // get the billing address of the order
             order.getBillingAddress().then((billingaddress) => {
                 // get all the products in the order
-                order.getProductOrders().then((productIds) => {
-                    var products = Array();
-
-                    for (var i = 0; i < productIds.length; i++) {
-                        Product.findById(productIds[i].ProductId).then(item => {
-                            const product = {
-                                name: item.Name,
-                                qty: productIds.Qty,
-                                price: item.Price
-                            }
-
-                            products.push(product);
-                        })
-                    }
-
+                order.getProductOrders().then((productorders) => {
                     res.json({
                         order: order,
                         billingaddress: billingaddress,
-                        products: products
+                        productorders: productorders
                     });
                 });
             });
@@ -112,7 +100,7 @@ router.route('/:id')
     // update an order by specific id
     .put((req, res) => {
         const idToUpdate = req.params.id;
-        const { Status } = req.body;
+        const Status = req.body.Status;
 
         // update the status of the order
         Order.findById(idToUpdate).then(order => {
