@@ -30,6 +30,15 @@ To run the web app:
 3) In the second terminal, change into the server directory and run `npm run start`
 4) Then visit [localhost:8080](localhost:8080)
 
+## How to Run the Cypress Automated Test Suite
+Make sure the database is completely fresh with the provided seed files(if you have modified certain things, the tests may become flaky and not run as intended)
+Chrome is also the intended browser for the web app, so certain tests may fail if not using Cypress with Chrome
+
+To run the tests:
+1) Change into the app directory
+2) Run `npm run test:e2e` to launch cypress
+3) Once in the Cypress menu, click `Run all specs` in the upper right-hand corner
+
 ## Things to Note
 To login as an Admin use the following info:
 * **Username:** admin@gmail.com
